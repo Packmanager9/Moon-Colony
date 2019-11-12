@@ -1,20 +1,24 @@
 // moonshot
 
-
+let landed = 0
 let maxspeed = 3.5
+let takeoff = 0
+//let rocketarray[0].xacc = 0
 
-let xmomentum = 0
-
-let ymomentum = 0
+// let rocketarray[0].yacc = 0
 
 let fuel = 500
-let health = 1000
+let healthstat = 100000
 
 
 window.addEventListener('DOMContentLoaded', (event) =>{
 
     let eaten = document.getElementById("eaten");
+    let momentum = document.getElementById("momentum");
     eaten.innerText = "0"
+    let health = document.getElementById("health");
+    health.innerText = `${healthstat}`
+    momentum.innerText = "0"
     let tutorial_canvas = document.getElementById("tutorial");
     let tutorial_canvas_context = tutorial_canvas.getContext('2d');
 
@@ -44,6 +48,12 @@ window.addEventListener('DOMContentLoaded', (event) =>{
             this.y += this.ymom
 
         }
+        stop(){
+            this.xmom = 0
+            this.xacc = 0
+            this.ymom = 0
+            this.yacc = 0
+        }
     }
 
     class Rectangle {
@@ -67,51 +77,60 @@ window.addEventListener('DOMContentLoaded', (event) =>{
         
         switch (event.keyCode) {
            case 65:  
-
+           takeoff = 0
+           landed = 0
            if(fuel > 0){
-           rocketarray[0].xmom -= 30/rocketarray[0].mass
+           rocketarray[0].xmom -= 3000/rocketarray[0].mass
            fuel--
            }
               break;
            case 87:
-
+                takeoff = 0
+                landed = 0
                 if(fuel > 0){
-                rocketarray[0].ymom -= 30/rocketarray[0].mass
+                rocketarray[0].ymom -= 3000/rocketarray[0].mass
                 fuel--
                 }
               break;
            case 68 :
 
+                takeoff = 0
+                landed = 0
                 if(fuel > 0){
-                rocketarray[0].xmom += 30/rocketarray[0].mass
+                rocketarray[0].xmom += 3000/rocketarray[0].mass
                 fuel--
                 }
               break;
               case 83:
                 
+                    takeoff = 0
+                    landed = 0
            if(fuel > 0){
-                    rocketarray[0].ymom += 30/rocketarray[0].mass
+                    rocketarray[0].ymom += 3000/rocketarray[0].mass
                     fuel--
                     }
                  break;
                  case 32:
       // spacebar
+      rocketarray[0].mass += 100
+      rocketarray[0].radius += .2
                     break;
         }
     };
 
 
-    let rocket = new Circle(2500, 1000, 5, "#FFFF00", 0, 0, 100 )
+    let rocket = new Circle(2500, 1000, 5, "#FF0000", 0, 0, 1000 )
    let   rocketarray = [rocket]
    let planets = []
-   let moon = new Circle(4000, 1000, 50, "#FFFFFF", 0, 0, 1000 )
-   let earth = new Circle(1000, 1000, 100, "#0000FF", 0, 0, 10000 )
+   let moon = new Circle(4000, 1000, 100, "#FFFFFF", 0, 0, 100000 )
+   let earth = new Circle(1000, 1000, 150, "#0000FF", 0, 0, 100000 )
 
 
    let asteroids = []
    for(let h = 0; h < 20; h++){
 
-   let a1 = new Circle((Math.random()*tutorial_canvas.width), Math.random()*tutorial_canvas.height, 10, "#DDAA00", ((Math.random()*1)-.5), ((Math.random()*1)-.5), 1000000 )
+    let basicstat = (Math.random()*25)+5
+    let a1 = new Circle((Math.random()*tutorial_canvas.width), Math.random()*tutorial_canvas.height, basicstat, "#DDAA00", 0, 0, basicstat*10 )
 
    planets.push(a1)
 
@@ -119,9 +138,11 @@ window.addEventListener('DOMContentLoaded', (event) =>{
    }
 
 
-   planets.push(moon) 
+//    asteroids.push(earth)
+//    asteroids.push(moon)
    planets.push(earth)
    
+  planets.push(moon) 
 
 
 window.setInterval(function(){ 
@@ -134,17 +155,19 @@ window.setInterval(function(){
     for(let w = 0; w < planets.length; w++){
         for(let g = 0; g < asteroids.length; g++){
 
-
+            let masses = 0
         
-        let masses = planets[w].mass*asteroids[g].mass
+            if(planets[w] !== asteroids[g]){
+         masses = planets[w].mass*asteroids[g].mass
+         
         let distance = Math.abs(Math.abs(planets[w].x) - Math.abs(asteroids[g].x))
         let distancey = Math.abs(Math.abs(planets[w].y) - Math.abs(asteroids[g].y))
 
         let hypotenuse = Math.sqrt((distancey*distancey)+(distance*distance))
 
-        console.log(hypotenuse)
-        let squaredisy = hypotenuse*hypotenuse/200
-        let squaredis = hypotenuse*hypotenuse/200
+        //console.log(hypotenuse)
+        let squaredisy = hypotenuse*hypotenuse/2
+        let squaredis = hypotenuse*hypotenuse/2
         let forcevec = (masses/squaredis) 
         let forcevecy = (masses/squaredisy)
 
@@ -185,10 +208,27 @@ window.setInterval(function(){
                 asteroids[g].yacc += 0-forcevecy
             }
 
-            asteroids[g].xmom += asteroids[g].xacc/700000
-            asteroids[g].ymom += asteroids[g].yacc/700000
+            asteroids[g].xmom += asteroids[g].xacc/70000
+            asteroids[g].ymom += asteroids[g].yacc/70000
 
+
+            if(asteroids[g].xmom  > .433){
+                asteroids[g].xmom  = .433
+            }
+            if(asteroids[g].xmom  < -.433){
+                asteroids[g].xmom  = -.433
+            }
+            if(asteroids[g].ymom  > .433){
+                asteroids[g].ymom  = .433
+            }
+            if(asteroids[g].ymom  < -.433){
+                asteroids[g].ymom  = -.433
+            }
+
+
+            if(landed == 0){
             asteroids[g].move()
+            }
 
             if(asteroids[g].x < 0){
                 asteroids[g].x = tutorial_canvas.width
@@ -208,7 +248,31 @@ window.setInterval(function(){
                 asteroids[g].y = 0
 
             }
-            
+
+
+    if(((rocketarray[0].x-rocketarray[0].radius)  < (asteroids[g].x + asteroids[g].radius) && ((rocketarray[0].x+rocketarray[0].radius) > (asteroids[g].x - asteroids[g].radius)) && ((rocketarray[0].y+rocketarray[0].radius)  > (asteroids[g].y - asteroids[g].radius))&&((rocketarray[0].y-rocketarray[0].radius)  < (asteroids[g].y + asteroids[g].radius)))){
+      let damage = asteroids[g].mass*(Math.abs(asteroids[g].xmom)*Math.abs(asteroids[g].ymom))
+
+      if(damage > 12000){
+        healthstat -= 12000
+      }else{
+        healthstat  -= damage
+      }
+
+    // let audio = new Audio('bleep.wav');
+
+    // if (audio.duration > 0 && !audio.paused) {
+
+    //     //Its playing...do your job
+    
+    // } else {
+    //    // audio.play();
+    // }
+  
+      }
+        }else{
+           
+               }
         }
 
 
@@ -227,7 +291,7 @@ window.setInterval(function(){
 
         let hypotenuse = Math.sqrt((distancey*distancey)+(distance*distance))
 
-        console.log(hypotenuse)
+       // console.log(hypotenuse)
         let squaredisy = hypotenuse*hypotenuse/1.41
         let squaredis = hypotenuse*hypotenuse/1.41
         let forcevec = (masses/squaredis) 
@@ -237,37 +301,37 @@ window.setInterval(function(){
         forcevecy /= 1
 
 
-        if(Math.abs(forcevec) > 20){
-            forcevec = 20
+        if(Math.abs(forcevec) > 100){
+            forcevec = 100
 
         }
-        if(Math.abs(forcevecy) > 20){
-            forcevecy = 20
+        if(Math.abs(forcevecy) > 100){
+            forcevecy = 100
 
         }
 
-        if(ymomentum > 20){
-            ymomentum = 20
+        if(rocketarray[0].yacc > 100){
+            rocketarray[0].yacc = 100
         }
-        if(ymomentum < -20){
-            ymomentum = -20
+        if(rocketarray[0].yacc < -100){
+            rocketarray[0].yacc = -100
         }
-        if(xmomentum > 20){
-            xmomentum = 20
+        if(rocketarray[0].xacc > 100){
+            rocketarray[0].xacc = 100
         }
-        if(xmomentum < -20){
-            xmomentum = -20
+        if(rocketarray[0].xacc < -100){
+            rocketarray[0].xacc = -100
         }
 
         if(rocketarray[0].x < planets[w].x){
-            xmomentum += forcevec*3
+            rocketarray[0].xacc += forcevec*3
             }else{
-                xmomentum += 0-forcevec*3
+                rocketarray[0].xacc += 0-forcevec*3
             }
             if(rocketarray[0].y < planets[w].y){
-            ymomentum += forcevecy*3
+            rocketarray[0].yacc += forcevecy*3
             }else{
-                ymomentum += 0-forcevecy*3
+                rocketarray[0].yacc += 0-forcevecy*3
             }
         
     planets[w].draw(tutorial_canvas_context)
@@ -275,10 +339,46 @@ window.setInterval(function(){
 }
 
 
-    rocketarray[0].xmom += xmomentum/3500
-    rocketarray[0].ymom += ymomentum/3500
+    rocketarray[0].xmom += rocketarray[0].xacc/3700
+    rocketarray[0].ymom += rocketarray[0].yacc/3700
+
+
+    if(rocketarray[0].xmom  > 5){
+        rocketarray[0].xmom  = 5
+    }
+    if(rocketarray[0].xmom  < -5){
+        rocketarray[0].xmom  = -5
+    }
+    if(rocketarray[0].ymom  > 5){
+        rocketarray[0].ymom  = 5
+    }
+    if(rocketarray[0].ymom  < -5){
+        rocketarray[0].ymom  = -5
+    }
+
     //console.log( rocketarray[0].xmom , rocketarray[0].ymom)
+
+    if(landed == 0 && takeoff == 0){
     rocketarray[0].move()
+    momentum.innerText = Math.round(Math.abs(rocketarray[0].ymom) + Math.abs(rocketarray[0].xmom)) + ''
+    } else{
+        rocketarray[0].stop()
+
+    }
+    
+    if(((rocketarray[0].x-rocketarray[0].radius)  < (earth.x + earth.radius) && ((rocketarray[0].x+rocketarray[0].radius) > (earth.x - earth.radius)) && ((rocketarray[0].y+rocketarray[0].radius)  > (earth.y - earth.radius))&&((rocketarray[0].y-rocketarray[0].radius)  < (earth.y + earth.radius)))){
+        fuel = 1000
+        landed =1
+        takeoff= 1
+      }else if(((rocketarray[0].x-rocketarray[0].radius)  < (moon.x + moon.radius) && ((rocketarray[0].x+rocketarray[0].radius) > (moon.x - moon.radius)) && ((rocketarray[0].y+rocketarray[0].radius)  > (moon.y - moon.radius))&&((rocketarray[0].y-rocketarray[0].radius)  < (moon.y + moon.radius)))){
+
+       fuel = 1000
+        landed =1
+        takeoff= 1
+      }else {
+        takeoff = 0
+                 landed = 0
+      }
     rocketarray[0].draw(tutorial_canvas_context)
 
     if(rocket.x > tutorial_canvas.width){
@@ -297,8 +397,14 @@ window.setInterval(function(){
     //   rocketarray = []
         
     }
+ if(healthstat <= 0){
+      fuel = 0
+      healthstat = 0
 
+    }
 
+    health.innerText = `${Math.ceil(healthstat/1000)}`
+   
 }, 12)
 
 
