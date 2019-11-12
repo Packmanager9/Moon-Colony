@@ -1,5 +1,6 @@
 // moonshot
 
+let timer1 = 0
 let landed = 0
 let maxspeed = 3.5
 let takeoff = 0
@@ -10,8 +11,33 @@ let takeoff = 0
 let fuel = 500
 let healthstat = 100000
 
+let moonorganics = 100000
+let moonuranium = 100000
+let moonhelium = 100000
+let moonmetals = 100000
+let moonmetaloids = 100000
+let moonelectricity = 100000
+let moonpopulation = 10000
 
 window.addEventListener('DOMContentLoaded', (event) =>{
+
+
+    let organics = document.getElementById("organics");
+    let uranium = document.getElementById("uranium");
+    let helium = document.getElementById("helium");
+    let metals = document.getElementById("metals");
+    let metaloids = document.getElementById("metaloids");
+    let electricity = document.getElementById("electricity");
+    let population = document.getElementById("population");
+
+    organics.innerText =  `Organics ${moonorganics}`
+    uranium.innerText =  `Uranium ${moonuranium}`
+    metaloids.innerText =  `Metaloids ${moonmetaloids}`
+    electricity.innerText =  `Electricity ${moonelectricity}`
+    helium.innerText =  `Helium ${moonhelium}`
+    metals.innerText =  `Electricity ${moonmetals}`
+    population.innerText =  `Population ${moonpopulation}`
+
 
     let eaten = document.getElementById("eaten");
     let momentum = document.getElementById("momentum");
@@ -25,7 +51,7 @@ window.addEventListener('DOMContentLoaded', (event) =>{
     tutorial_canvas.style.background =  "#000000"
 
     class Circle {
-        constructor(x, y, radius, color, xmom = 0, ymom = 0, mass = 1, xacc = 0, yacc = 0) {
+        constructor(x, y, radius, color, xmom = 0, ymom = 0, mass = 1, xacc = 0, yacc = 0, tail = []) {
             this.x = x
             this.y = y
             this.radius = radius
@@ -35,13 +61,16 @@ window.addEventListener('DOMContentLoaded', (event) =>{
             this.mass = mass
             this.xacc = xacc
             this.yacc = yacc
+            this.tail = tail
         }
         draw(context){
             context.lineWidth =22;
             context.strokeStyle = this.color
             context.beginPath();
             context.arc(this.x, this.y, this.radius, 0, (Math.PI*2), true)
-            context.stroke();
+            context.fillStyle = this.color
+          context.fill()
+            context.stroke();  
         }
         move(){
             this.x += this.xmom
@@ -119,18 +148,31 @@ window.addEventListener('DOMContentLoaded', (event) =>{
     };
 
 
+    let comet = []
     let rocket = new Circle(2500, 1000, 5, "#FF0000", 0, 0, 1000 )
    let   rocketarray = [rocket]
    let planets = []
-   let moon = new Circle(4000, 1000, 100, "#FFFFFF", 0, 0, 100000 )
+   let moon = new Circle(4000, 1000, 100, "#BBBBBB", 0, 0, 100000 )
+   let crater = new Circle(4000, 1000, 40, "#999999")
+   let crater2 = new Circle(4000, 1000, 20, "#DDDDDD")
+   let crater3 = new Circle(4000, 1000, 10, "#999999" )
+
+
+   let land1 = new Circle(4000, 1000, 50, "#00aa00")
+   let land2 = new Circle(4000, 1000, 30, "#009900")
+   let land3 = new Circle(4000, 1000, 10, "#008800" )
+   let land4 = new Circle(4000, 1000, 40, "#00dd00")
+   let land5 = new Circle(4000, 1000, 20, "#99ff00")
+   let land6 = new Circle(4000, 1000, 5, "#0099ff" )
+   let land7  = new Rectangle(0,0, 33, 75, "#ccAA00")
    let earth = new Circle(1000, 1000, 150, "#0000FF", 0, 0, 100000 )
 
 
    let asteroids = []
    for(let h = 0; h < 20; h++){
 
-    let basicstat = (Math.random()*25)+5
-    let a1 = new Circle((Math.random()*tutorial_canvas.width), Math.random()*tutorial_canvas.height, basicstat, "#DDAA00", 0, 0, basicstat*10 )
+    let basicstat = (Math.random()*4.5)+8
+    let a1 = new Circle((Math.random()*tutorial_canvas.width), Math.random()*tutorial_canvas.height, basicstat, "#DDAA00", 0, 0, basicstat*20 )
 
    planets.push(a1)
 
@@ -138,6 +180,13 @@ window.addEventListener('DOMContentLoaded', (event) =>{
    }
 
 
+   for(let h = 0; h < 8; h++){
+   let a1 = new Circle((Math.random()*tutorial_canvas.width), Math.random()*tutorial_canvas.height, 25, "#00FFFF", 0, 0, -10 )
+
+   planets.push(a1)
+   asteroids.push(a1)
+   comet.push(a1)
+   }
 //    asteroids.push(earth)
 //    asteroids.push(moon)
    planets.push(earth)
@@ -151,6 +200,47 @@ window.setInterval(function(){
     eaten.innerText = `${fuel}`
 
     tutorial_canvas_context.clearRect(0, 0, tutorial_canvas.width, tutorial_canvas.height)
+
+
+    for (let f = 0; f < comet.length; f++){
+
+
+
+        if(landed != 1){
+
+       comet[f].tail.pop()
+
+    if(comet[f].tail.length < 35){
+        comet[f].tail.unshift([comet[f].x, comet[f].y])
+        comet[f].tail.unshift([comet[f].x, comet[f].y])
+     }
+  //   if(foodeaten > snakebody.length){
+  //     snakebody.push([ship.x, ship.y])
+  //   }
+
+    }
+    tutorial_canvas_context.beginPath(); 
+    tutorial_canvas_context.moveTo(comet[f].x, comet[f].y); 
+    let widthline = 70
+  for (let t = 0; t < comet[f].tail.length; t++){
+
+      tutorial_canvas_context.lineTo(comet[f].tail[t][0], comet[f].tail[t][1]); 
+
+
+
+
+      tutorial_canvas_context.lineWidth = widthline; 
+      widthline *= .95
+      widthline--
+      tutorial_canvas_context.strokeStyle = '#00FFFF';  
+    tutorial_canvas_context.stroke();  
+  
+  }
+    tutorial_canvas_context.stroke();  
+      console.log(comet[f].tail)
+
+    }
+
 
     for(let w = 0; w < planets.length; w++){
         for(let g = 0; g < asteroids.length; g++){
@@ -227,36 +317,68 @@ window.setInterval(function(){
 
 
             if(landed == 0){
-            asteroids[g].move()
-            }
-
-            if(asteroids[g].x < 0){
-                asteroids[g].x = tutorial_canvas.width
-
-            }
-            
-            if(asteroids[g].x > tutorial_canvas.width){
-                asteroids[g].x = 0
-
-            }
-            if(asteroids[g].y < 0){
-                asteroids[g].y = tutorial_canvas.height
-
-            }
-            
-            if(asteroids[g].y > tutorial_canvas.height){
-                asteroids[g].y = 0
-
-            }
-
+                asteroids[g].move()
+                }
+    
+                if(asteroids[g].x < 0){
+                    asteroids[g].x = tutorial_canvas.width
+    
+                    asteroids[g].tail = []
+                }
+                
+                if(asteroids[g].x > tutorial_canvas.width){
+                    asteroids[g].x = 0
+    
+                    asteroids[g].tail = []
+                }
+                if(asteroids[g].y < 0){
+                    asteroids[g].y = tutorial_canvas.height
+    
+                    asteroids[g].tail = []
+                }
+                
+                if(asteroids[g].y > tutorial_canvas.height){
+                    asteroids[g].y = 0
+                    asteroids[g].tail = []
+                }
+    
 
     if(((rocketarray[0].x-rocketarray[0].radius)  < (asteroids[g].x + asteroids[g].radius) && ((rocketarray[0].x+rocketarray[0].radius) > (asteroids[g].x - asteroids[g].radius)) && ((rocketarray[0].y+rocketarray[0].radius)  > (asteroids[g].y - asteroids[g].radius))&&((rocketarray[0].y-rocketarray[0].radius)  < (asteroids[g].y + asteroids[g].radius)))){
-      let damage = asteroids[g].mass*(Math.abs(asteroids[g].xmom)*Math.abs(asteroids[g].ymom))
+      let damage = Math.abs(asteroids[g].mass)*(Math.abs(asteroids[g].xmom)+Math.abs(asteroids[g].ymom))*1.5
 
+      rocketarray[0].xmom*= -1 
+      rocketarray[0].ymom*= -1 
+      asteroids[g].xmom *= -1 
+       asteroids[g].ymom *= -1
+
+       while(((rocketarray[0].x-rocketarray[0].radius)  < (asteroids[g].x + asteroids[g].radius) && ((rocketarray[0].x+rocketarray[0].radius) > (asteroids[g].x - asteroids[g].radius)) && ((rocketarray[0].y+rocketarray[0].radius)  > (asteroids[g].y - asteroids[g].radius))&&((rocketarray[0].y-rocketarray[0].radius)  < (asteroids[g].y + asteroids[g].radius)))){
+        let kine1 = rocketarray[0].xmom*rocketarray[0].mass  
+         let kine2 = rocketarray[0].ymom*rocketarray[0].mass 
+
+         let smak1 = asteroids[g].xmom * asteroids[g].mass
+         let smak2 = asteroids[g].ymom * asteroids[g].mass
+
+
+
+
+        rocketarray[0].x += rocketarray[0].xmom
+        rocketarray[0].y += rocketarray[0].ymom
+
+  
+
+        asteroids[g].x += asteroids[g].xmom
+        asteroids[g].y += asteroids[g].ymom
+        asteroids[g].x += asteroids[g].xmom
+        asteroids[g].y += asteroids[g].ymom
+        asteroids[g].x += asteroids[g].xmom
+        asteroids[g].y += asteroids[g].ymom
+        asteroids[g].x += asteroids[g].xmom
+        asteroids[g].y += asteroids[g].ymom
+       }
       if(damage > 12000){
         healthstat -= 12000
       }else{
-        healthstat  -= damage
+        healthstat  -= (damage+ ((rocketarray[0].mass +Math.abs(asteroids[g].mass))*11) )
       }
 
     // let audio = new Audio('bleep.wav');
@@ -360,7 +482,7 @@ window.setInterval(function(){
 
     if(landed == 0 && takeoff == 0){
     rocketarray[0].move()
-    momentum.innerText = Math.round(Math.abs(rocketarray[0].ymom) + Math.abs(rocketarray[0].xmom)) + ''
+    momentum.innerText = Math.round((Math.abs(rocketarray[0].ymom) + Math.abs(rocketarray[0].xmom))*10) + ''
     } else{
         rocketarray[0].stop()
 
@@ -405,7 +527,108 @@ window.setInterval(function(){
 
     health.innerText = `${Math.ceil(healthstat/1000)}`
    
-}, 12)
+
+    if(landed == 1){
+
+    }else{
+        if((timer1%1000) < 500 ){
+            moon.y +=1
+            earth.x -=1
+    
+        }else{
+            moon.y -=1
+            earth.x +=1
+    
+        }
+        if((timer1%488) < 244 ){
+            moon.x +=1
+    
+            earth.y -=1
+        }else{
+            moon.x -=1
+    
+            earth.y +=1
+        }
+}
+crater.x = moon.x + 40
+crater.y = moon.y+ 40
+crater3.x = moon.x + -40
+crater3.y = moon.y+ 40
+crater2.x = moon.x + 40
+crater2.y = moon.y+ -40
+
+land4.x = earth.x+10
+land4.y = earth.y
+
+
+land2.x = earth.x-50
+land2.y = earth.y+60
+
+
+land3.x = earth.x+70
+land3.y = earth.y-80
+
+land1.x = earth.x-65
+land1.y = earth.y-75
+
+land6.x = earth.x-12
+land6.y = earth.y-12
+
+land5.x = earth.x+70
+land5.y = earth.y+80
+
+land7.left = earth.x
+land7.top = earth.y
+
+
+land1.draw(tutorial_canvas_context)
+land2.draw(tutorial_canvas_context)
+land3.draw(tutorial_canvas_context)
+land4.draw(tutorial_canvas_context)
+land7.draw(tutorial_canvas_context)
+land5.draw(tutorial_canvas_context)
+land6.draw(tutorial_canvas_context)
+
+crater.draw(tutorial_canvas_context)
+
+crater3.draw(tutorial_canvas_context)
+
+crater2.draw(tutorial_canvas_context)
+
+
+for(let st = 0; st<asteroids.length/2; st++){
+    asteroids[st].draw(tutorial_canvas_context)
+
+}
+for(let st = 0; st<comet.length; st++){
+    //comet[st].draw(tutorial_canvas_context)
+
+}
+
+
+
+    timer1++
+}, 18)
+
+
+window.setInterval(function(){ 
+
+    let eating = (moonpopulation/1000)*3
+
+    moonpopulation *= 1.0001
+
+    moonpopulation = Math.round(moonpopulation)
+
+    moonorganics -= eating
+
+
+    moonorganics = Math.round(moonorganics)
+
+
+    organics.innerText =  `Organics ${moonorganics}`
+    population.innerText =  `Population ${moonpopulation}`
+
+}, 24000)
 
 
 })
