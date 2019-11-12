@@ -1,9 +1,8 @@
 Rails.application.routes.draw do
-  get 'bases', to: "bases#index"
-  get 'bases/:id', to: "bases#show"
-  get 'mat_distributions', to: "mat_distributions#index"
-  get 'mat_distributions/:id', to: "mat_distributions#show"
-  get 'locations', to: "locations#index"
-  get 'material_resources', to: "material_resources#index"
+    resources :bases, only: [:index, :show]
+    resources :mat_distributions, only: [:index, :show]
+    resources :locations, only: [:index]
+    resources :material_resources, only: [:index]
+    
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
