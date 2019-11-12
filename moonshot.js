@@ -189,10 +189,10 @@ window.addEventListener('DOMContentLoaded', (event) =>{
    }
 //    asteroids.push(earth)
 //    asteroids.push(moon)
-   planets.push(earth)
    
   planets.push(moon) 
 
+   planets.push(earth)
 
 window.setInterval(function(){ 
 
@@ -407,6 +407,8 @@ window.setInterval(function(){
 
 
         
+
+     if(planets[w] !== moon && planets[w] !== earth){
         let masses = planets[w].mass*rocketarray[0].mass
         let distance = Math.abs(Math.abs(planets[w].x) - Math.abs(rocketarray[0].x))
         let distancey = Math.abs(Math.abs(planets[w].y) - Math.abs(rocketarray[0].y))
@@ -455,7 +457,88 @@ window.setInterval(function(){
             }else{
                 rocketarray[0].yacc += 0-forcevecy*3
             }
-        
+     }else{
+        let massese = earth.mass*rocketarray[0].mass
+        let massesm = moon.mass*rocketarray[0].mass
+        let distancee = Math.abs(Math.abs(earth.x) - Math.abs(rocketarray[0].x))
+        let distanceye = Math.abs(Math.abs(earth.y) - Math.abs(rocketarray[0].y))
+        let distancem = Math.abs(Math.abs(moon.x) - Math.abs(rocketarray[0].x))
+        let distanceym = Math.abs(Math.abs(moon.y) - Math.abs(rocketarray[0].y))
+
+        let hypotenusee = Math.sqrt((distanceye*distanceye)+(distancee*distancee))
+        let hypotenusem = Math.sqrt((distanceym*distanceym)+(distancem*distancem))
+
+       // console.log(hypotenuse)
+        let squaredisye = hypotenusee*hypotenusee/1.41
+        let squaredise = hypotenusee*hypotenusee/1.41
+        let forcevece = (massese/squaredise) 
+        let forcevecye = (massese/squaredisye)
+
+
+        let squaredisym = hypotenusem*hypotenusem/1.41
+        let squaredism = hypotenusem*hypotenusem/1.41
+        let forcevecm = (massesm/squaredism) 
+        let forcevecym = (massesm/squaredisym)
+
+        // forcevec /= 1
+        // forcevecy /= 1
+
+
+        if(Math.abs(forcevece) > 100){
+            forcevece = 100
+
+        }
+        if(Math.abs(forcevecye) > 100){
+            forcevecye = 100
+
+        }
+        if(Math.abs(forcevecm) > 100){
+            forcevecm = 100
+
+        }
+        if(Math.abs(forcevecym) > 100){
+            forcevecym = 100
+
+        }
+
+        if(rocketarray[0].yacc > 100){
+            rocketarray[0].yacc = 100
+        }
+        if(rocketarray[0].yacc < -100){
+            rocketarray[0].yacc = -100
+        }
+        if(rocketarray[0].xacc > 100){
+            rocketarray[0].xacc = 100
+        }
+        if(rocketarray[0].xacc < -100){
+            rocketarray[0].xacc = -100
+        }
+
+        if(rocketarray[0].x < earth.x){
+            rocketarray[0].xacc += forcevece*3
+            }else{
+                rocketarray[0].xacc += 0-forcevece*3
+            }
+            if(rocketarray[0].y < earth.y){
+            rocketarray[0].yacc += forcevecye*3
+            }else{
+                rocketarray[0].yacc += 0-forcevecye*3
+            }
+
+
+            if(rocketarray[0].x < moon.x){
+                rocketarray[0].xacc += forcevecm*3
+                }else{
+                    rocketarray[0].xacc += 0-forcevecm*3
+                }
+                if(rocketarray[0].y < moon.y){
+                rocketarray[0].yacc += forcevecym*3
+                }else{
+                    rocketarray[0].yacc += 0-forcevecym*3
+                }
+    
+
+     }
     planets[w].draw(tutorial_canvas_context)
 
 }
