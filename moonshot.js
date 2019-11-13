@@ -190,6 +190,8 @@ window.addEventListener('DOMContentLoaded', (event) =>{
    let land7  = new Rectangle(0,0, 33, 75, "#ccAA00")
    let earth = new Circle(500, 1000, 150, "#0000FF", 0, 0, 100000 )
 
+   let stars = []
+
 
    let asteroids = []
    for(let h = 0; h < 16; h++){
@@ -210,6 +212,12 @@ window.addEventListener('DOMContentLoaded', (event) =>{
    asteroids.push(a1)
    comet.push(a1)
    }
+
+   for(let h = 0; h < 800; h++){
+   let a1 = new Rectangle((Math.random()*tutorial_canvas.height), Math.random()*tutorial_canvas.width, ((Math.random()*3)+1),((Math.random()*3)+1), getRandomLightColor())
+
+   stars.push(a1)
+   }
 //    asteroids.push(earth)
 //    asteroids.push(moon)
    comet.push(rocket)
@@ -223,6 +231,13 @@ window.setInterval(function(){
     eaten.innerText = `${fuel}`
 
     tutorial_canvas_context.clearRect(0, 0, tutorial_canvas.width, tutorial_canvas.height)
+
+
+
+
+    for (let n = 0; n < stars.length; n++){
+            stars[n].draw(tutorial_canvas_context)
+    }
 
 
     for (let f = 0; f < comet.length; f++){
@@ -802,7 +817,7 @@ window.setInterval(function(){
     moonorganics = Math.round(moonorganics)
 
 
-    moonelectricity+=(solarpanels*.51)
+    moonelectricity+=(solarpanels*0.7)
     moonelectricity-=(moonpopulation/1000)*2.15
     moonelectricity = Math.round(moonelectricity)
     organics.innerText =  `Organics ${moonorganics}`
@@ -825,5 +840,15 @@ window.setInterval(function(){
 
 }, 2500)
 
+
+
+function getRandomLightColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 10)+6];
+    }
+    return color;
+  }
 
 })
