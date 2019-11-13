@@ -17,10 +17,13 @@ ActiveRecord::Schema.define(version: 2019_11_12_002904) do
     t.integer "population"
     t.integer "happiness"
     t.integer "waste_management"
-    t.integer "power_generation"
-    t.integer "production"
+    t.integer "solar_power"
+    t.integer "nuclear_power"
+    t.integer "material_production"
+    t.integer "food_production"
     t.integer "housing"
     t.integer "luxury"
+    t.string "misc"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
