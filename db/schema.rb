@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 2019_11_12_002904) do
   end
 
   create_table "mat_distributions", force: :cascade do |t|
-    t.integer "resource_id"
+    t.integer "material_resource_id"
     t.integer "location_id"
     t.integer "amount"
     t.datetime "created_at", precision: 6, null: false

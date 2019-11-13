@@ -1,4 +1,4 @@
 class MatDistribution < ApplicationRecord
-    belongs_to :material_resources
-    belongs_to :locations
+    belongs_to :material_resource
+    belongs_to :location
 end
