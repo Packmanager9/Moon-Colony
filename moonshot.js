@@ -23,6 +23,15 @@ let moonpopulation = 10000
 window.addEventListener('DOMContentLoaded', (event) =>{
 
 
+    let declare = document.getElementById("independence");
+
+    declare.addEventListener('click', e => {
+     
+
+
+
+    })
+
     let organics = document.getElementById("organics");
     let uranium = document.getElementById("uranium");
     let helium = document.getElementById("helium");
@@ -153,7 +162,7 @@ window.addEventListener('DOMContentLoaded', (event) =>{
     let rocket = new Circle(2500, 1000, 5, "#FF0000", 0, 0, 1000 )
    let   rocketarray = [rocket]
    let planets = []
-   let moon = new Circle(4000, 1000, 100, "#BBBBBB", 0, 0, 100000 )
+   let moon = new Circle(4300, 1000, 100, "#BBBBBB", 0, 0, 100000 )
    let crater = new Circle(4000, 1000, 40, "#999999")
    let crater2 = new Circle(4000, 1000, 20, "#DDDDDD")
    let crater3 = new Circle(4000, 1000, 10, "#999999" )
@@ -166,13 +175,13 @@ window.addEventListener('DOMContentLoaded', (event) =>{
    let land5 = new Circle(4000, 1000, 20, "#99ff00")
    let land6 = new Circle(4000, 1000, 5, "#0099ff" )
    let land7  = new Rectangle(0,0, 33, 75, "#ccAA00")
-   let earth = new Circle(1000, 1000, 150, "#0000FF", 0, 0, 100000 )
+   let earth = new Circle(500, 1000, 150, "#0000FF", 0, 0, 100000 )
 
 
    let asteroids = []
-   for(let h = 0; h < 20; h++){
+   for(let h = 0; h < 16; h++){
 
-    let basicstat = (Math.random()*4.5)+8
+    let basicstat = (Math.random()*8.5)+5
     let a1 = new Circle((Math.random()*tutorial_canvas.width), Math.random()*tutorial_canvas.height, basicstat, "#DDAA00", 0, 0, basicstat*19 )
 
    planets.push(a1)
@@ -616,7 +625,7 @@ if (iframe === 0){
     //console.log( rocketarray[0].xmom , rocketarray[0].ymom)
 
     if(landed == 0 && takeoff == 0){
-    rocketarray[0].move()
+   rocketarray[0].move()
     momentum.innerText = Math.round((Math.abs(rocketarray[0].ymom) + Math.abs(rocketarray[0].xmom))*10) + ''
     } else{
         rocketarray[0].stop()
@@ -669,23 +678,35 @@ if (iframe === 0){
     if(landed == 1){
 
     }else{
-        if((timer1%1000) < 500 ){
-            moon.y +=1
-            earth.x -=1
-    
-        }else{
-            moon.y -=1
-            earth.x +=1
-    
+        if((timer1%1001) < 250 ){
+            earth.y +=1.5
+            earth.x +=1.5
+        }else if((timer1%1001) < 500 ){
+            earth.y -=1.5
+            earth.x +=1.5
+        }else if((timer1%1001) < 750 ){
+            earth.y -=1.5
+            earth.x -=1.5
+        }else if((timer1%1001) < 1000 ){
+            earth.y +=1.5
+            earth.x -=1.5
         }
-        if((timer1%488) < 244 ){
-            moon.x +=1
-    
-            earth.y -=1
-        }else{
-            moon.x -=1
-    
-            earth.y +=1
+        if((timer1%400) < 100 ){
+
+            moon.y -=2
+            moon.x -=2
+        }else if((timer1%400) < 200 ){
+
+            moon.y +=2
+            moon.x -=2
+        }else if((timer1%400) < 300 ){
+
+            moon.y +=2
+            moon.x +=2
+        }else if((timer1%400) < 400 ){
+
+            moon.y -=2
+            moon.x +=2
         }
 }
 crater.x = moon.x + 40
@@ -746,7 +767,11 @@ for(let st = 0; st<comet.length; st++){
 
 
 rocketarray[0].draw(tutorial_canvas_context)
+if(landed == 0){
     timer1++
+}
+
+
 }, 18)
 
 
