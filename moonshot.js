@@ -304,8 +304,8 @@ window.addEventListener('DOMContentLoaded', (event) =>{
 
    stars.push(a1)
    }
-//    asteroids.push(earth)
-//    asteroids.push(moon)
+ //   asteroids.push(earth)
+  //  asteroids.push(moon)
    comet.push(rocket)
   planets.push(moon) 
 
