@@ -172,7 +172,7 @@ window.addEventListener('DOMContentLoaded', (event) =>{
    for(let h = 0; h < 20; h++){
 
     let basicstat = (Math.random()*4.5)+8
-    let a1 = new Circle((Math.random()*tutorial_canvas.width), Math.random()*tutorial_canvas.height, basicstat, "#DDAA00", 0, 0, basicstat*20 )
+    let a1 = new Circle((Math.random()*tutorial_canvas.width), Math.random()*tutorial_canvas.height, basicstat, "#DDAA00", 0, 0, basicstat*19 )
 
    planets.push(a1)
 
@@ -189,7 +189,7 @@ window.addEventListener('DOMContentLoaded', (event) =>{
    }
 //    asteroids.push(earth)
 //    asteroids.push(moon)
-   
+   comet.push(rocket)
   planets.push(moon) 
 
    planets.push(earth)
@@ -208,32 +208,74 @@ window.setInterval(function(){
 
         if(landed != 1){
 
+            if(comet[f] !== rocket){
        comet[f].tail.pop()
-
     if(comet[f].tail.length < 35){
         comet[f].tail.unshift([comet[f].x, comet[f].y])
         comet[f].tail.unshift([comet[f].x, comet[f].y])
      }
+    }else{
+
+
+       comet[f].tail.pop()
+       if(comet[f].tail.length < 10){
+           comet[f].tail.unshift([comet[f].x, comet[f].y])
+           comet[f].tail.unshift([comet[f].x, comet[f].y])
+        }
+    }
   //   if(foodeaten > snakebody.length){
   //     snakebody.push([ship.x, ship.y])
   //   }
 
     }
-    tutorial_canvas_context.beginPath(); 
-    tutorial_canvas_context.moveTo(comet[f].x, comet[f].y); 
-    let widthline = 70
+
+    if(comet[f] !== rocket){
+        var widthline = 70
+    }else{
+        var widthline = 40
+
+        var widthlinex = 20
+    
+    }
   for (let t = 0; t < comet[f].tail.length; t++){
 
+
+
+
+
+
+    if(comet[f] !== rocket){
+
+        tutorial_canvas_context.beginPath(); 
+        tutorial_canvas_context.moveTo(comet[f].x, comet[f].y); 
       tutorial_canvas_context.lineTo(comet[f].tail[t][0], comet[f].tail[t][1]); 
-
-
-
-
       tutorial_canvas_context.lineWidth = widthline; 
       widthline *= .95
       widthline--
       tutorial_canvas_context.strokeStyle = '#00FFFF';  
     tutorial_canvas_context.stroke();  
+    }else{
+
+        tutorial_canvas_context.beginPath(); 
+        tutorial_canvas_context.moveTo(comet[f].x, comet[f].y); 
+      tutorial_canvas_context.lineTo(comet[f].tail[t][0], comet[f].tail[t][1]); 
+      tutorial_canvas_context.lineWidth = widthline; 
+        widthline *= .90
+        widthline--
+        tutorial_canvas_context.strokeStyle = '#FF0000';  
+        tutorial_canvas_context.stroke();  
+
+
+
+      tutorial_canvas_context.beginPath(); 
+      tutorial_canvas_context.moveTo(comet[f].x, comet[f].y); 
+      tutorial_canvas_context.lineTo(comet[f].tail[t][0], comet[f].tail[t][1]); 
+      tutorial_canvas_context.lineWidth = widthlinex; 
+      widthlinex *= .10
+      widthlinex--
+      tutorial_canvas_context.strokeStyle = '#FFFF00';  
+    tutorial_canvas_context.stroke();  
+    }
   
   }
     tutorial_canvas_context.stroke();  
@@ -350,24 +392,28 @@ window.setInterval(function(){
       rocketarray[0].ymom*= -1 
       asteroids[g].xmom *= -1 
        asteroids[g].ymom *= -1
+    //    let kine1 = rocketarray[0].xmom*rocketarray[0].mass  
+    //      let kine2 = rocketarray[0].ymom*rocketarray[0].mass 
+
+    //      let smak1 = asteroids[g].xmom * asteroids[g].mass
+    //      let smak2 = asteroids[g].ymom * asteroids[g].mass
+
+    //      rocketarray[0].xmom = smak1/rocketarray[0].mass
+    //      rocketarray[0].ymom = smak2/rocketarray[0].mass
+
+
+    //      asteroids[g].xmom = kine1/asteroids[g].mass
+    //      asteroids[g].ymom = kine2/asteroids[g].mass
+
+
 
        while(((rocketarray[0].x-rocketarray[0].radius)  < (asteroids[g].x + asteroids[g].radius) && ((rocketarray[0].x+rocketarray[0].radius) > (asteroids[g].x - asteroids[g].radius)) && ((rocketarray[0].y+rocketarray[0].radius)  > (asteroids[g].y - asteroids[g].radius))&&((rocketarray[0].y-rocketarray[0].radius)  < (asteroids[g].y + asteroids[g].radius)))){
-        let kine1 = rocketarray[0].xmom*rocketarray[0].mass  
-         let kine2 = rocketarray[0].ymom*rocketarray[0].mass 
-
-         let smak1 = asteroids[g].xmom * asteroids[g].mass
-         let smak2 = asteroids[g].ymom * asteroids[g].mass
-
-
-
+ 
 
         rocketarray[0].x += rocketarray[0].xmom
         rocketarray[0].y += rocketarray[0].ymom
 
-  
 
-        asteroids[g].x += asteroids[g].xmom
-        asteroids[g].y += asteroids[g].ymom
         asteroids[g].x += asteroids[g].xmom
         asteroids[g].y += asteroids[g].ymom
         asteroids[g].x += asteroids[g].xmom
@@ -561,6 +607,7 @@ window.setInterval(function(){
         rocketarray[0].ymom  = -5
     }
 
+    //steve
     //console.log( rocketarray[0].xmom , rocketarray[0].ymom)
 
     if(landed == 0 && takeoff == 0){
@@ -575,11 +622,14 @@ window.setInterval(function(){
         fuel = 1000
         landed =1
         takeoff= 1
+        rocket.tail = []
       }else if(((rocketarray[0].x-rocketarray[0].radius)  < (moon.x + moon.radius) && ((rocketarray[0].x+rocketarray[0].radius) > (moon.x - moon.radius)) && ((rocketarray[0].y+rocketarray[0].radius)  > (moon.y - moon.radius))&&((rocketarray[0].y-rocketarray[0].radius)  < (moon.y + moon.radius)))){
 
        fuel = 1000
         landed =1
         takeoff= 1
+
+        rocket.tail = []
       }else {
         takeoff = 0
                  landed = 0
@@ -690,6 +740,7 @@ for(let st = 0; st<comet.length; st++){
 
 
 
+rocketarray[0].draw(tutorial_canvas_context)
     timer1++
 }, 18)
 
