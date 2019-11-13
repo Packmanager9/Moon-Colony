@@ -4,6 +4,7 @@ let timer1 = 0
 let landed = 0
 let maxspeed = 3.5
 let takeoff = 0
+let iframe = 0
 //let rocketarray[0].xacc = 0
 
 // let rocketarray[0].yacc = 0
@@ -384,10 +385,9 @@ window.setInterval(function(){
                     asteroids[g].tail = []
                 }
     
-
     if(((rocketarray[0].x-rocketarray[0].radius)  < (asteroids[g].x + asteroids[g].radius) && ((rocketarray[0].x+rocketarray[0].radius) > (asteroids[g].x - asteroids[g].radius)) && ((rocketarray[0].y+rocketarray[0].radius)  > (asteroids[g].y - asteroids[g].radius))&&((rocketarray[0].y-rocketarray[0].radius)  < (asteroids[g].y + asteroids[g].radius)))){
       let damage = Math.abs(asteroids[g].mass)*(Math.abs(asteroids[g].xmom)+Math.abs(asteroids[g].ymom))*1.5
-
+      
       rocketarray[0].xmom*= -1 
       rocketarray[0].ymom*= -1 
       asteroids[g].xmom *= -1 
@@ -421,11 +421,16 @@ window.setInterval(function(){
         asteroids[g].x += asteroids[g].xmom
         asteroids[g].y += asteroids[g].ymom
        }
+
+if (iframe === 0){
+    iframe = 1
       if(damage > 12000){
         healthstat -= 12000
       }else{
         healthstat  -= (damage+ ((rocketarray[0].mass +Math.abs(asteroids[g].mass))*11) )
       }
+
+    }
 
     // let audio = new Audio('bleep.wav');
 
@@ -763,6 +768,13 @@ window.setInterval(function(){
     population.innerText =  `Population ${moonpopulation}`
 
 }, 24000)
+
+
+window.setInterval(function(){ 
+
+    iframe = 0
+
+}, 2500)
 
 
 })
