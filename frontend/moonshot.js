@@ -169,15 +169,15 @@ window.addEventListener('DOMContentLoaded', (event) =>{
 
 
    let asteroids = []
-//    for(let h = 0; h < 20; h++){
+   for(let h = 0; h < 20; h++){
 
-//     let basicstat = (Math.random()*4.5)+8
-//     let a1 = new Circle((Math.random()*tutorial_canvas.width), Math.random()*tutorial_canvas.height, basicstat, "#DDAA00", 0, 0, basicstat*20 )
+    let basicstat = (Math.random()*4.5)+8
+    let a1 = new Circle((Math.random()*tutorial_canvas.width), Math.random()*tutorial_canvas.height, basicstat, "#DDAA00", 0, 0, basicstat*20 )
 
-//    planets.push(a1)
+   planets.push(a1)
 
-//    asteroids.push(a1)
-//    }
+   asteroids.push(a1)
+   }
 
 
    for(let h = 0; h < 8; h++){
