@@ -39,7 +39,7 @@ window.addEventListener('DOMContentLoaded', (event) =>{
      metaloids.innerText =  `Metaloids ${moonmetaloids}`
      electricity.innerText =  `Electricity ${moonelectricity}`
      helium.innerText =  `Helium ${moonhelium}`
-     metals.innerText =  `Electricity ${moonmetals}`
+     metals.innerText =  `Metals ${moonmetals}`
      population.innerText =  `Population ${moonpopulation}`
 
 
@@ -58,7 +58,7 @@ window.addEventListener('DOMContentLoaded', (event) =>{
     metaloids.innerText =  `Metaloids ${moonmetaloids}`
     electricity.innerText =  `Electricity ${moonelectricity}`
     helium.innerText =  `Helium ${moonhelium}`
-    metals.innerText =  `Electricity ${moonmetals}`
+    metals.innerText =  `Metals ${moonmetals}`
     population.innerText =  `Population ${moonpopulation}`
 
 
@@ -827,7 +827,7 @@ window.setInterval(function(){
     metaloids.innerText =  `Metaloids ${moonmetaloids}`
     electricity.innerText =  `Electricity ${moonelectricity}`
     helium.innerText =  `Helium ${moonhelium}`
-    metals.innerText =  `Electricity ${moonmetals}`
+    metals.innerText =  `Metals ${moonmetals}`
     population.innerText =  `Population ${moonpopulation}`
 
 }, 24000)
