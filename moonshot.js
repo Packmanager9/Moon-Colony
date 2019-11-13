@@ -11,6 +11,7 @@ let iframe = 0
 
 let fuel = 500
 let healthstat = 100000
+let solarpanels = 0
 
 let moonorganics = 100000
 let moonuranium = 100000
@@ -24,10 +25,22 @@ window.addEventListener('DOMContentLoaded', (event) =>{
 
 
     let declare = document.getElementById("independence");
+    declare.innerText = "Buy Solar Panel"
 
     declare.addEventListener('click', e => {
-     
+     solarpanels+=1
+     moonmetaloids-=10
+     moonmetals-=10
 
+     organics.innerText =  `Organics ${moonorganics}`
+     population.innerText =  `Population ${moonpopulation}`
+     organics.innerText =  `Organics ${moonorganics}`
+     uranium.innerText =  `Uranium ${moonuranium}`
+     metaloids.innerText =  `Metaloids ${moonmetaloids}`
+     electricity.innerText =  `Electricity ${moonelectricity}`
+     helium.innerText =  `Helium ${moonhelium}`
+     metals.innerText =  `Electricity ${moonmetals}`
+     population.innerText =  `Population ${moonpopulation}`
 
 
     })
@@ -789,7 +802,17 @@ window.setInterval(function(){
     moonorganics = Math.round(moonorganics)
 
 
+    moonelectricity+=(solarpanels*.51)
+    moonelectricity-=(moonpopulation/1000)*2.15
+    moonelectricity = Math.round(moonelectricity)
     organics.innerText =  `Organics ${moonorganics}`
+    population.innerText =  `Population ${moonpopulation}`
+    organics.innerText =  `Organics ${moonorganics}`
+    uranium.innerText =  `Uranium ${moonuranium}`
+    metaloids.innerText =  `Metaloids ${moonmetaloids}`
+    electricity.innerText =  `Electricity ${moonelectricity}`
+    helium.innerText =  `Helium ${moonhelium}`
+    metals.innerText =  `Electricity ${moonmetals}`
     population.innerText =  `Population ${moonpopulation}`
 
 }, 24000)
@@ -798,6 +821,7 @@ window.setInterval(function(){
 window.setInterval(function(){ 
 
     iframe = 0
+
 
 }, 2500)
 
