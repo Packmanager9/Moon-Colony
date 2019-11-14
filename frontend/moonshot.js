@@ -1,27 +1,148 @@
 // moonshot
 
+
+const locationsURL = 'http://localhost:3000/locations'
+const materialsURL = 'http://localhost:3000/material_resources'
+const matDistributionsURL = 'http://localhost:3000/mat_distributions'
+const basesURL = 'http://localhost:3000/bases'
+
+
 let timer1 = 0
 let landed = 0
 let maxspeed = 3.5
 let takeoff = 0
+let iframe = 0
 //let rocketarray[0].xacc = 0
 
 // let rocketarray[0].yacc = 0
 
 let fuel = 500
 let healthstat = 100000
+let solarpanels = 0
+let reactors = 0
+let houses = 1
+let farms = 0
+let wastereclamation = 0
+let lux = 0
+let mines = 0
 
-let moonorganics = 100000
-let moonuranium = 100000
-let moonhelium = 100000
+let moonorganics = 1000
+let moonuranium = 1000
+let moonhelium = 1000
 let moonmetals = 100000
 let moonmetaloids = 100000
-let moonelectricity = 100000
+let moonelectricity = 1000
 let moonpopulation = 10000
 
 window.addEventListener('DOMContentLoaded', (event) =>{
 
 
+    let buysolar = document.getElementById("solar");
+    buysolar.innerText = "Build Solar Panel"
+    let buyfarming = document.getElementById("farming");
+    buyfarming.innerText = "Build Hydroponic Farm"
+    let buynuclear = document.getElementById("nuclear");
+    buynuclear.innerText = "Build Reactor"
+    let buyhouse = document.getElementById("housing");
+    buyhouse.innerText = "Build Biodome"
+    let buymine = document.getElementById("resources");
+    buymine.innerText = "Build Mine"
+    let buywaste = document.getElementById("waste");
+    buywaste.innerText = "Improve Waste Reclamation"
+    let buyluxuries = document.getElementById("luxury");
+    buyluxuries.innerText = "Build Luxury Facilities"
+
+    buysolar.addEventListener('click', e => {
+
+        if(moonmetaloids >= 100){
+            if(moonmetals >= 100){
+
+        solarpanels+=1
+        moonmetaloids-=100
+        moonmetals-=100
+
+        }
+    }
+   
+        displayTexts()
+   
+       })
+       buyfarming.addEventListener('click', e => {
+
+        if(moonmetaloids >= 800){
+            if(moonmetals >= 200){
+        farms+=1
+        moonmetaloids-=800
+        moonmetals-=200
+            }
+        }
+        displayTexts()
+   
+       })
+       buynuclear.addEventListener('click', e => {
+
+        if(moonmetaloids >= 250){
+            if(moonmetals >= 750){
+        reactors+=1
+        moonmetaloids-=250
+        moonmetals-=750
+            }
+        }
+   
+        displayTexts()
+   
+       })
+       buyhouse.addEventListener('click', e => {
+
+        if(moonmetaloids >= 500){
+            if(moonmetals >= 500){
+        houses+=1
+        moonmetaloids-=500
+        moonmetals-=500
+            }
+        }
+        displayTexts()
+   
+       })
+       buywaste.addEventListener('click', e => {
+
+        if(moonmetaloids >= 1000){
+            if(moonmetals >= 1000){
+        wastereclamation+=1
+        moonmetaloids-=1000
+        moonmetals-=1000
+            }
+        }
+   
+        displayTexts()
+   
+       })
+       buyluxuries.addEventListener('click', e => {
+
+        if(moonmetaloids >= 2500){
+            if(moonmetals >= 2500){
+        lux+=1
+        moonmetaloids-=2500
+        moonmetals-=2500
+            }
+        }
+   
+        displayTexts()
+   
+       })
+       buymine.addEventListener('click', e => {
+
+        if(moonmetaloids >= 750){
+            if(moonmetals >= 250){
+        mines+=1
+        moonmetaloids-=750
+        moonmetals-=250
+            }
+        }
+   
+        displayTexts()
+   
+       })
     let organics = document.getElementById("organics");
     let uranium = document.getElementById("uranium");
     let helium = document.getElementById("helium");
@@ -30,13 +151,8 @@ window.addEventListener('DOMContentLoaded', (event) =>{
     let electricity = document.getElementById("electricity");
     let population = document.getElementById("population");
 
-    organics.innerText =  `Organics ${moonorganics}`
-    uranium.innerText =  `Uranium ${moonuranium}`
-    metaloids.innerText =  `Metaloids ${moonmetaloids}`
-    electricity.innerText =  `Electricity ${moonelectricity}`
-    helium.innerText =  `Helium ${moonhelium}`
-    metals.innerText =  `Electricity ${moonmetals}`
-    population.innerText =  `Population ${moonpopulation}`
+   
+    displayTexts()
 
 
     let eaten = document.getElementById("eaten");
@@ -65,10 +181,20 @@ window.addEventListener('DOMContentLoaded', (event) =>{
         }
         draw(context){
             context.lineWidth =22;
+
+            if((this === rocketarray[0])){
+                context.lineWidth = this.radius/1.41;
+            }
             context.strokeStyle = this.color
             context.beginPath();
             context.arc(this.x, this.y, this.radius, 0, (Math.PI*2), true)
             context.fillStyle = this.color
+            if((this === rocketarray[0])&&(iframe == 0)){
+                context.fillStyle = "#FFFF88"
+            }
+            if((this === rocketarray[0])&&(iframe == 1)){
+                context.fillStyle = "#222222"
+            }
           context.fill()
             context.stroke();  
         }
@@ -149,10 +275,10 @@ window.addEventListener('DOMContentLoaded', (event) =>{
 
 
     let comet = []
-    let rocket = new Circle(2500, 1000, 5, "#FF0000", 0, 0, 1000 )
+    let rocket = new Circle(2500, 1000, 12, "#FF0000", 0, 0, 1000 )
    let   rocketarray = [rocket]
    let planets = []
-   let moon = new Circle(4000, 1000, 100, "#BBBBBB", 0, 0, 100000 )
+   let moon = new Circle(4300, 1000, 100, "#BBBBBB", 0, 0, 100000 )
    let crater = new Circle(4000, 1000, 40, "#999999")
    let crater2 = new Circle(4000, 1000, 20, "#DDDDDD")
    let crater3 = new Circle(4000, 1000, 10, "#999999" )
@@ -165,14 +291,16 @@ window.addEventListener('DOMContentLoaded', (event) =>{
    let land5 = new Circle(4000, 1000, 20, "#99ff00")
    let land6 = new Circle(4000, 1000, 5, "#0099ff" )
    let land7  = new Rectangle(0,0, 33, 75, "#ccAA00")
-   let earth = new Circle(1000, 1000, 150, "#0000FF", 0, 0, 100000 )
+   let earth = new Circle(500, 1000, 150, "#0000FF", 0, 0, 100000 )
+
+   let stars = []
 
 
    let asteroids = []
-   for(let h = 0; h < 20; h++){
+   for(let h = 0; h < 16; h++){
 
-    let basicstat = (Math.random()*4.5)+8
-    let a1 = new Circle((Math.random()*tutorial_canvas.width), Math.random()*tutorial_canvas.height, basicstat, "#DDAA00", 0, 0, basicstat*20 )
+    let basicstat = (Math.random()*8.5)+5
+    let a1 = new Circle((Math.random()*tutorial_canvas.width), Math.random()*tutorial_canvas.height, basicstat, "#DDAA00", 0, 0, basicstat*19 )
 
    planets.push(a1)
 
@@ -187,12 +315,18 @@ window.addEventListener('DOMContentLoaded', (event) =>{
    asteroids.push(a1)
    comet.push(a1)
    }
-//    asteroids.push(earth)
-//    asteroids.push(moon)
-   planets.push(earth)
-   
+
+   for(let h = 0; h < 800; h++){
+   let a1 = new Rectangle((Math.random()*tutorial_canvas.height), Math.random()*tutorial_canvas.width, ((Math.random()*5)+1),((Math.random()*5)+1), getRandomLightColor())
+
+   stars.push(a1)
+   }
+ //   asteroids.push(earth)
+  //  asteroids.push(moon)
+   comet.push(rocket)
   planets.push(moon) 
 
+   planets.push(earth)
 
 window.setInterval(function(){ 
 
@@ -202,42 +336,91 @@ window.setInterval(function(){
     tutorial_canvas_context.clearRect(0, 0, tutorial_canvas.width, tutorial_canvas.height)
 
 
+
+
+    for (let n = 0; n < stars.length; n++){
+            stars[n].draw(tutorial_canvas_context)
+    }
+
+
     for (let f = 0; f < comet.length; f++){
 
 
 
-        if(landed != 1){
+        //if(landed != 1){
 
+            if(comet[f] !== rocket){
        comet[f].tail.pop()
-
     if(comet[f].tail.length < 35){
         comet[f].tail.unshift([comet[f].x, comet[f].y])
         comet[f].tail.unshift([comet[f].x, comet[f].y])
      }
+    }else{
+
+
+       comet[f].tail.pop()
+       if(comet[f].tail.length < 20){
+           comet[f].tail.unshift([comet[f].x, comet[f].y])
+           comet[f].tail.unshift([comet[f].x, comet[f].y])
+        }
+    }
   //   if(foodeaten > snakebody.length){
   //     snakebody.push([ship.x, ship.y])
   //   }
 
+  //  }
+
+    if(comet[f] !== rocket){
+        var widthline = 70
+    }else{
+        var widthline = 40
+
+        var widthlinex = 20
+    
     }
-    tutorial_canvas_context.beginPath(); 
-    tutorial_canvas_context.moveTo(comet[f].x, comet[f].y); 
-    let widthline = 70
   for (let t = 0; t < comet[f].tail.length; t++){
 
+
+
+
+
+
+    if(comet[f] !== rocket){
+
+        tutorial_canvas_context.beginPath(); 
+        tutorial_canvas_context.moveTo(comet[f].x, comet[f].y); 
       tutorial_canvas_context.lineTo(comet[f].tail[t][0], comet[f].tail[t][1]); 
-
-
-
-
       tutorial_canvas_context.lineWidth = widthline; 
       widthline *= .95
       widthline--
       tutorial_canvas_context.strokeStyle = '#00FFFF';  
     tutorial_canvas_context.stroke();  
+    }else{
+
+        tutorial_canvas_context.beginPath(); 
+        tutorial_canvas_context.moveTo(comet[f].x, comet[f].y); 
+      tutorial_canvas_context.lineTo(comet[f].tail[t][0], comet[f].tail[t][1]); 
+      tutorial_canvas_context.lineWidth = widthline; 
+        widthline *= .90
+        widthline--
+        tutorial_canvas_context.strokeStyle = '#FF0000';  
+        tutorial_canvas_context.stroke();  
+
+
+
+      tutorial_canvas_context.beginPath(); 
+      tutorial_canvas_context.moveTo(comet[f].x, comet[f].y); 
+      tutorial_canvas_context.lineTo(comet[f].tail[t][0], comet[f].tail[t][1]); 
+      tutorial_canvas_context.lineWidth = widthlinex; 
+      widthlinex *= .10
+      widthlinex--
+      tutorial_canvas_context.strokeStyle = '#FFFF00';  
+    tutorial_canvas_context.stroke();  
+    }
   
   }
     tutorial_canvas_context.stroke();  
-      console.log(comet[f].tail)
+      //console.log(comet[f].tail)
 
     }
 
@@ -255,7 +438,7 @@ window.setInterval(function(){
 
         let hypotenuse = Math.sqrt((distancey*distancey)+(distance*distance))
 
-        //console.log(hypotenuse)
+        ////console.log(hypotenuse)
         let squaredisy = hypotenuse*hypotenuse/2
         let squaredis = hypotenuse*hypotenuse/2
         let forcevec = (masses/squaredis) 
@@ -316,9 +499,9 @@ window.setInterval(function(){
             }
 
 
-            if(landed == 0){
+          //  if(landed == 0){
                 asteroids[g].move()
-                }
+          //      }
     
                 if(asteroids[g].x < 0){
                     asteroids[g].x = tutorial_canvas.width
@@ -342,32 +525,36 @@ window.setInterval(function(){
                     asteroids[g].tail = []
                 }
     
-
+  if(landed == 0){
     if(((rocketarray[0].x-rocketarray[0].radius)  < (asteroids[g].x + asteroids[g].radius) && ((rocketarray[0].x+rocketarray[0].radius) > (asteroids[g].x - asteroids[g].radius)) && ((rocketarray[0].y+rocketarray[0].radius)  > (asteroids[g].y - asteroids[g].radius))&&((rocketarray[0].y-rocketarray[0].radius)  < (asteroids[g].y + asteroids[g].radius)))){
-      let damage = Math.abs(asteroids[g].mass)*(Math.abs(asteroids[g].xmom)+Math.abs(asteroids[g].ymom))*1.5
-
+      let damage = Math.abs(asteroids[g].mass)*(Math.abs(asteroids[g].xmom)+Math.abs(asteroids[g].ymom))*1.5 + ((rocketarray[0].mass +Math.abs(asteroids[g].mass))*11) 
+      
       rocketarray[0].xmom*= -1 
       rocketarray[0].ymom*= -1 
       asteroids[g].xmom *= -1 
        asteroids[g].ymom *= -1
+    //    let kine1 = rocketarray[0].xmom*rocketarray[0].mass  
+    //      let kine2 = rocketarray[0].ymom*rocketarray[0].mass 
+
+    //      let smak1 = asteroids[g].xmom * asteroids[g].mass
+    //      let smak2 = asteroids[g].ymom * asteroids[g].mass
+
+    //      rocketarray[0].xmom = smak1/rocketarray[0].mass
+    //      rocketarray[0].ymom = smak2/rocketarray[0].mass
+
+
+    //      asteroids[g].xmom = kine1/asteroids[g].mass
+    //      asteroids[g].ymom = kine2/asteroids[g].mass
+
+
 
        while(((rocketarray[0].x-rocketarray[0].radius)  < (asteroids[g].x + asteroids[g].radius) && ((rocketarray[0].x+rocketarray[0].radius) > (asteroids[g].x - asteroids[g].radius)) && ((rocketarray[0].y+rocketarray[0].radius)  > (asteroids[g].y - asteroids[g].radius))&&((rocketarray[0].y-rocketarray[0].radius)  < (asteroids[g].y + asteroids[g].radius)))){
-        let kine1 = rocketarray[0].xmom*rocketarray[0].mass  
-         let kine2 = rocketarray[0].ymom*rocketarray[0].mass 
-
-         let smak1 = asteroids[g].xmom * asteroids[g].mass
-         let smak2 = asteroids[g].ymom * asteroids[g].mass
-
-
-
+ 
 
         rocketarray[0].x += rocketarray[0].xmom
         rocketarray[0].y += rocketarray[0].ymom
 
-  
 
-        asteroids[g].x += asteroids[g].xmom
-        asteroids[g].y += asteroids[g].ymom
         asteroids[g].x += asteroids[g].xmom
         asteroids[g].y += asteroids[g].ymom
         asteroids[g].x += asteroids[g].xmom
@@ -375,11 +562,16 @@ window.setInterval(function(){
         asteroids[g].x += asteroids[g].xmom
         asteroids[g].y += asteroids[g].ymom
        }
+
+if (iframe === 0){
+    iframe = 1
       if(damage > 12000){
         healthstat -= 12000
       }else{
-        healthstat  -= (damage+ ((rocketarray[0].mass +Math.abs(asteroids[g].mass))*11) )
+        healthstat  -= (damage)
       }
+
+    }
 
     // let audio = new Audio('bleep.wav');
 
@@ -396,7 +588,7 @@ window.setInterval(function(){
            
                }
         }
-
+    }
 
 
         
@@ -407,13 +599,15 @@ window.setInterval(function(){
 
 
         
+
+     if(planets[w] !== moon && planets[w] !== earth){
         let masses = planets[w].mass*rocketarray[0].mass
         let distance = Math.abs(Math.abs(planets[w].x) - Math.abs(rocketarray[0].x))
         let distancey = Math.abs(Math.abs(planets[w].y) - Math.abs(rocketarray[0].y))
 
         let hypotenuse = Math.sqrt((distancey*distancey)+(distance*distance))
 
-       // console.log(hypotenuse)
+       // //console.log(hypotenuse)
         let squaredisy = hypotenuse*hypotenuse/1.41
         let squaredis = hypotenuse*hypotenuse/1.41
         let forcevec = (masses/squaredis) 
@@ -455,7 +649,88 @@ window.setInterval(function(){
             }else{
                 rocketarray[0].yacc += 0-forcevecy*3
             }
-        
+     }else{
+        let massese = earth.mass*rocketarray[0].mass
+        let massesm = moon.mass*rocketarray[0].mass
+        let distancee = Math.abs(Math.abs(earth.x) - Math.abs(rocketarray[0].x))
+        let distanceye = Math.abs(Math.abs(earth.y) - Math.abs(rocketarray[0].y))
+        let distancem = Math.abs(Math.abs(moon.x) - Math.abs(rocketarray[0].x))
+        let distanceym = Math.abs(Math.abs(moon.y) - Math.abs(rocketarray[0].y))
+
+        let hypotenusee = Math.sqrt((distanceye*distanceye)+(distancee*distancee))
+        let hypotenusem = Math.sqrt((distanceym*distanceym)+(distancem*distancem))
+
+       // //console.log(hypotenuse)
+        let squaredisye = hypotenusee*hypotenusee/1.41
+        let squaredise = hypotenusee*hypotenusee/1.41
+        let forcevece = (massese/squaredise) 
+        let forcevecye = (massese/squaredisye)
+
+
+        let squaredisym = hypotenusem*hypotenusem/1.41
+        let squaredism = hypotenusem*hypotenusem/1.41
+        let forcevecm = (massesm/squaredism) 
+        let forcevecym = (massesm/squaredisym)
+
+        // forcevec /= 1
+        // forcevecy /= 1
+
+
+        if(Math.abs(forcevece) > 100){
+            forcevece = 100
+
+        }
+        if(Math.abs(forcevecye) > 100){
+            forcevecye = 100
+
+        }
+        if(Math.abs(forcevecm) > 100){
+            forcevecm = 100
+
+        }
+        if(Math.abs(forcevecym) > 100){
+            forcevecym = 100
+
+        }
+
+        if(rocketarray[0].yacc > 100){
+            rocketarray[0].yacc = 100
+        }
+        if(rocketarray[0].yacc < -100){
+            rocketarray[0].yacc = -100
+        }
+        if(rocketarray[0].xacc > 100){
+            rocketarray[0].xacc = 100
+        }
+        if(rocketarray[0].xacc < -100){
+            rocketarray[0].xacc = -100
+        }
+
+        if(rocketarray[0].x < earth.x){
+            rocketarray[0].xacc += forcevece*3
+            }else{
+                rocketarray[0].xacc += 0-forcevece*3
+            }
+            if(rocketarray[0].y < earth.y){
+            rocketarray[0].yacc += forcevecye*3
+            }else{
+                rocketarray[0].yacc += 0-forcevecye*3
+            }
+
+
+            if(rocketarray[0].x < moon.x){
+                rocketarray[0].xacc += forcevecm*3
+                }else{
+                    rocketarray[0].xacc += 0-forcevecm*3
+                }
+                if(rocketarray[0].y < moon.y){
+                rocketarray[0].yacc += forcevecym*3
+                }else{
+                    rocketarray[0].yacc += 0-forcevecym*3
+                }
+    
+
+     }
     planets[w].draw(tutorial_canvas_context)
 
 }
@@ -478,10 +753,11 @@ window.setInterval(function(){
         rocketarray[0].ymom  = -5
     }
 
-    //console.log( rocketarray[0].xmom , rocketarray[0].ymom)
+    //steve
+    ////console.log( rocketarray[0].xmom , rocketarray[0].ymom)
 
     if(landed == 0 && takeoff == 0){
-    rocketarray[0].move()
+   rocketarray[0].move()
     momentum.innerText = Math.round((Math.abs(rocketarray[0].ymom) + Math.abs(rocketarray[0].xmom))*10) + ''
     } else{
         rocketarray[0].stop()
@@ -492,11 +768,14 @@ window.setInterval(function(){
         fuel = 1000
         landed =1
         takeoff= 1
+        rocket.tail = []
       }else if(((rocketarray[0].x-rocketarray[0].radius)  < (moon.x + moon.radius) && ((rocketarray[0].x+rocketarray[0].radius) > (moon.x - moon.radius)) && ((rocketarray[0].y+rocketarray[0].radius)  > (moon.y - moon.radius))&&((rocketarray[0].y-rocketarray[0].radius)  < (moon.y + moon.radius)))){
 
        fuel = 1000
         landed =1
         takeoff= 1
+
+        rocket.tail = []
       }else {
         takeoff = 0
                  landed = 0
@@ -528,28 +807,76 @@ window.setInterval(function(){
     health.innerText = `${Math.ceil(healthstat/1000)}`
    
 
-    if(landed == 1){
+    //if(landed == 1){
 
-    }else{
-        if((timer1%1000) < 500 ){
-            moon.y +=1
-            earth.x -=1
-    
-        }else{
-            moon.y -=1
-            earth.x +=1
-    
+  //  }else{
+        if((timer1%1001) < 250 ){
+            earth.y +=1.5
+            earth.x +=1.5
+        }else if((timer1%1001) < 500 ){
+            earth.y -=1.5
+            earth.x +=1.5
+        }else if((timer1%1001) < 750 ){
+            earth.y -=1.5
+            earth.x -=1.5
+        }else if((timer1%1001) < 1000 ){
+            earth.y +=1.5
+            earth.x -=1.5
         }
-        if((timer1%488) < 244 ){
-            moon.x +=1
-    
-            earth.y -=1
-        }else{
-            moon.x -=1
-    
-            earth.y +=1
+
+        if((landed === 1) && (rocketarray[0].x<(tutorial_canvas.width/2)) ){
+        if((timer1%1001) < 250 ){
+            rocketarray[0].y +=1.5
+            rocketarray[0].x +=1.5
+        }else if((timer1%1001) < 500 ){
+            rocketarray[0].y -=1.5
+            rocketarray[0].x +=1.5
+        }else if((timer1%1001) < 750 ){
+            rocketarray[0].y -=1.5
+            rocketarray[0].x -=1.5
+        }else if((timer1%1001) < 1000 ){
+            rocketarray[0].y +=1.5
+            rocketarray[0].x -=1.5
         }
-}
+    }
+        if((timer1%400) < 100 ){
+
+            moon.y -=2
+            moon.x -=2
+        }else if((timer1%400) < 200 ){
+
+            moon.y +=2
+            moon.x -=2
+        }else if((timer1%400) < 300 ){
+
+            moon.y +=2
+            moon.x +=2
+        }else if((timer1%400) < 400 ){
+
+            moon.y -=2
+            moon.x +=2
+        }
+
+        if((landed === 1) && (rocketarray[0].x>(tutorial_canvas.width/2)) ){
+        if((timer1%400) < 100 ){
+
+            rocketarray[0].y -=2
+            rocketarray[0].x -=2
+        }else if((timer1%400) < 200 ){
+
+            rocketarray[0].y +=2
+            rocketarray[0].x -=2
+        }else if((timer1%400) < 300 ){
+
+            rocketarray[0].y +=2
+            rocketarray[0].x +=2
+        }else if((timer1%400) < 400 ){
+
+            rocketarray[0].y -=2
+            rocketarray[0].x +=2
+        }
+    }
+//}
 crater.x = moon.x + 40
 crater.y = moon.y+ 40
 crater3.x = moon.x + -40
@@ -607,7 +934,12 @@ for(let st = 0; st<comet.length; st++){
 
 
 
+rocketarray[0].draw(tutorial_canvas_context)
+//if(landed == 0){
     timer1++
+//}
+
+
 }, 18)
 
 
@@ -615,20 +947,109 @@ window.setInterval(function(){
 
     let eating = (moonpopulation/1000)*3
 
+    if(mines >= 1){
+    moonuranium += (Math.random()*(mines*.75))+(.5/(mines+1))
+    }
+    
+
+    eating *= (1-(wastereclamation/100))
+
+    if (eating < 0){
+
+        eating = 0
+    }
+
+
+
+    if(moonpopulation < (houses*10000) && (moonorganics > 0)){
     moonpopulation *= 1.0001
+    }
+
+
+    if (moonorganics <= 0){
+        moonpopulation /= 1.005
+
+    }
+
 
     moonpopulation = Math.round(moonpopulation)
 
     moonorganics -= eating
 
+    moonorganics += (farms*2)
 
     moonorganics = Math.round(moonorganics)
 
 
-    organics.innerText =  `Organics ${moonorganics}`
-    population.innerText =  `Population ${moonpopulation}`
+    moonelectricity+=(solarpanels*0.7)
+    moonelectricity+=(reactors*(.7*16))
+    moonelectricity-=(moonpopulation/1000)*2.15
+    moonelectricity-=mines
+    moonelectricity-=farms
+    moonelectricity-=houses
+    moonelectricity-=(wastereclamation/5)
+    moonelectricity = Math.round(moonelectricity)
+    moonuranium-=reactors
+
+
+    setTimeout(function(){ 
+    updateResource(matDistributionsURL, 8, moonhelium)
+ }, 100);
+ setTimeout(function(){ 
+    updateResource(matDistributionsURL, 9, Math.round(moonuranium))
+}, 150);
+setTimeout(function(){ 
+    updateResource(matDistributionsURL, 10, moonpopulation)
+}, 200);
+setTimeout(function(){ 
+    updateResource(matDistributionsURL, 11, moonelectricity)
+}, 250);
+setTimeout(function(){ 
+    updateResource(matDistributionsURL, 12, moonorganics)
+}, 300);
+setTimeout(function(){ 
+    updateResource(matDistributionsURL, 13, moonmetals)
+}, 350);
+setTimeout(function(){ 
+    updateResource(matDistributionsURL, 14, moonmetaloids)
+}, 400);
+    
+    displayTexts()
 
 }, 24000)
 
+
+window.setInterval(function(){ 
+
+    iframe = 0
+
+
+}, 2500)
+
+
+
+function getRandomLightColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 10)+6];
+    }
+    return color;
+  }
+
+  function displayTexts(){
+    organics.innerText =  `Organics ${moonorganics}`
+    population.innerText =  `Population ${moonpopulation}`
+    organics.innerText =  `Organics ${moonorganics}`
+    uranium.innerText =  `Uranium ${moonuranium}`
+    metaloids.innerText =  `Metaloids ${moonmetaloids}`
+    electricity.innerText =  `Electricity ${moonelectricity}`
+    helium.innerText =  `Helium ${moonhelium}`
+    metals.innerText =  `Metals ${moonmetals}`
+    population.innerText =  `Population ${moonpopulation}`
+  }
+
+
+  //updateResource(matDistributionsURL, 1, 2123)
 
 })
