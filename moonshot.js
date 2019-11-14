@@ -1275,7 +1275,7 @@ setTimeout(function(){
 hash = []
 
     hash[population] = moonpopulation
-    hash[happiness] = lux
+   // hash[happiness] = lux
     hash[waste_management] = wastereclamation
     hash[solar_power] = solarpanels
     hash[nuclear_power] = reactors
