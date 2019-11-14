@@ -3,6 +3,7 @@
     
 # rescue => exception
 # end
+=begin
 Base.create({name: "Neoterrum", population: 0, happiness: 60, waste_management: 0, solar_power: 0, nuclear_power: 0, material_production: 0, food_production: 0, housing: 0, luxury: 0, misc: 0})
 
 #1
@@ -27,8 +28,9 @@ loc1 = Location.create({name: "Earth"})
 Location.create({name: "Moon"})
 Location.create({name: "Ship"})
 Location.create({name: "Space"})
+=end
 
-mat1 = MatDistribution.create({material_resource_id: res1.id, location_id: loc1.id, amount: 10000})
+MatDistribution.create({material_resource_id: 1, location_id: 1, amount: 10000})
 MatDistribution.create({material_resource_id: 2, location_id: 1, amount: 10000})
 MatDistribution.create({material_resource_id: 8, location_id: 1, amount: 8000000000})
 MatDistribution.create({material_resource_id: 3, location_id: 1, amount: 172000000000})
@@ -52,7 +54,5 @@ MatDistribution.create({material_resource_id: 4, location_id: 3, amount: 0})
 MatDistribution.create({material_resource_id: 5, location_id: 3, amount: 0})
 MatDistribution.create({material_resource_id: 6, location_id: 3, amount: 0})
 MatDistribution.create({material_resource_id: 7, location_id: 3, amount: 25000})
-
-puts MatDistribution.all
 
 puts "done"
