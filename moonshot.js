@@ -162,7 +162,7 @@ window.addEventListener('DOMContentLoaded', (event) =>{
           if((landed === 1) && (rocketarray[0].x<(tutorial_canvas.width/2)) ){
           if(credits >= tradetotal){
           credits -= tradetotal
-          moonmetals += tradetotal
+          rocketmetals += tradetotal
           }
         }
           displayTexts()
@@ -175,7 +175,7 @@ window.addEventListener('DOMContentLoaded', (event) =>{
         if((landed === 1) && (rocketarray[0].x<(tutorial_canvas.width/2)) ){
         if(credits >= tradetotal){
         credits -= tradetotal
-        moonmetaloids += tradetotal
+        rocketmetaloids += tradetotal
         }
     }
         displayTexts()
