@@ -1,5 +1,12 @@
 // moonshot
 
+
+const locationsURL = 'http://localhost:3000/locations'
+const materialsURL = 'http://localhost:3000/material_resources'
+const matDistributionsURL = 'http://localhost:3000/mat_distributions'
+const basesURL = 'http://localhost:3000/bases'
+
+
 let timer1 = 0
 let landed = 0
 let maxspeed = 3.5
@@ -174,10 +181,20 @@ window.addEventListener('DOMContentLoaded', (event) =>{
         }
         draw(context){
             context.lineWidth =22;
+
+            if((this === rocketarray[0])){
+                context.lineWidth = this.radius/1.41;
+            }
             context.strokeStyle = this.color
             context.beginPath();
             context.arc(this.x, this.y, this.radius, 0, (Math.PI*2), true)
             context.fillStyle = this.color
+            if((this === rocketarray[0])&&(iframe == 0)){
+                context.fillStyle = "#FFFF88"
+            }
+            if((this === rocketarray[0])&&(iframe == 1)){
+                context.fillStyle = "#222222"
+            }
           context.fill()
             context.stroke();  
         }
@@ -258,7 +275,7 @@ window.addEventListener('DOMContentLoaded', (event) =>{
 
 
     let comet = []
-    let rocket = new Circle(2500, 1000, 5, "#FF0000", 0, 0, 1000 )
+    let rocket = new Circle(2500, 1000, 12, "#FF0000", 0, 0, 1000 )
    let   rocketarray = [rocket]
    let planets = []
    let moon = new Circle(4300, 1000, 100, "#BBBBBB", 0, 0, 100000 )
@@ -342,7 +359,7 @@ window.setInterval(function(){
 
 
        comet[f].tail.pop()
-       if(comet[f].tail.length < 10){
+       if(comet[f].tail.length < 20){
            comet[f].tail.unshift([comet[f].x, comet[f].y])
            comet[f].tail.unshift([comet[f].x, comet[f].y])
         }
@@ -403,7 +420,7 @@ window.setInterval(function(){
   
   }
     tutorial_canvas_context.stroke();  
-      console.log(comet[f].tail)
+      //console.log(comet[f].tail)
 
     }
 
@@ -421,7 +438,7 @@ window.setInterval(function(){
 
         let hypotenuse = Math.sqrt((distancey*distancey)+(distance*distance))
 
-        //console.log(hypotenuse)
+        ////console.log(hypotenuse)
         let squaredisy = hypotenuse*hypotenuse/2
         let squaredis = hypotenuse*hypotenuse/2
         let forcevec = (masses/squaredis) 
@@ -510,7 +527,7 @@ window.setInterval(function(){
     
   if(landed == 0){
     if(((rocketarray[0].x-rocketarray[0].radius)  < (asteroids[g].x + asteroids[g].radius) && ((rocketarray[0].x+rocketarray[0].radius) > (asteroids[g].x - asteroids[g].radius)) && ((rocketarray[0].y+rocketarray[0].radius)  > (asteroids[g].y - asteroids[g].radius))&&((rocketarray[0].y-rocketarray[0].radius)  < (asteroids[g].y + asteroids[g].radius)))){
-      let damage = Math.abs(asteroids[g].mass)*(Math.abs(asteroids[g].xmom)+Math.abs(asteroids[g].ymom))*1.5
+      let damage = Math.abs(asteroids[g].mass)*(Math.abs(asteroids[g].xmom)+Math.abs(asteroids[g].ymom))*1.5 + ((rocketarray[0].mass +Math.abs(asteroids[g].mass))*11) 
       
       rocketarray[0].xmom*= -1 
       rocketarray[0].ymom*= -1 
@@ -551,7 +568,7 @@ if (iframe === 0){
       if(damage > 12000){
         healthstat -= 12000
       }else{
-        healthstat  -= (damage+ ((rocketarray[0].mass +Math.abs(asteroids[g].mass))*11) )
+        healthstat  -= (damage)
       }
 
     }
@@ -590,7 +607,7 @@ if (iframe === 0){
 
         let hypotenuse = Math.sqrt((distancey*distancey)+(distance*distance))
 
-       // console.log(hypotenuse)
+       // //console.log(hypotenuse)
         let squaredisy = hypotenuse*hypotenuse/1.41
         let squaredis = hypotenuse*hypotenuse/1.41
         let forcevec = (masses/squaredis) 
@@ -643,7 +660,7 @@ if (iframe === 0){
         let hypotenusee = Math.sqrt((distanceye*distanceye)+(distancee*distancee))
         let hypotenusem = Math.sqrt((distanceym*distanceym)+(distancem*distancem))
 
-       // console.log(hypotenuse)
+       // //console.log(hypotenuse)
         let squaredisye = hypotenusee*hypotenusee/1.41
         let squaredise = hypotenusee*hypotenusee/1.41
         let forcevece = (massese/squaredise) 
@@ -737,7 +754,7 @@ if (iframe === 0){
     }
 
     //steve
-    //console.log( rocketarray[0].xmom , rocketarray[0].ymom)
+    ////console.log( rocketarray[0].xmom , rocketarray[0].ymom)
 
     if(landed == 0 && takeoff == 0){
    rocketarray[0].move()
@@ -974,10 +991,32 @@ window.setInterval(function(){
     moonelectricity = Math.round(moonelectricity)
     moonuranium-=reactors
 
+
+    setTimeout(function(){ 
+    updateResource(matDistributionsURL, 8, moonhelium)
+ }, 100);
+ setTimeout(function(){ 
+    updateResource(matDistributionsURL, 9, Math.round(moonuranium))
+}, 150);
+setTimeout(function(){ 
+    updateResource(matDistributionsURL, 10, moonpopulation)
+}, 200);
+setTimeout(function(){ 
+    updateResource(matDistributionsURL, 11, moonelectricity)
+}, 250);
+setTimeout(function(){ 
+    updateResource(matDistributionsURL, 12, moonorganics)
+}, 300);
+setTimeout(function(){ 
+    updateResource(matDistributionsURL, 13, moonmetals)
+}, 350);
+setTimeout(function(){ 
+    updateResource(matDistributionsURL, 14, moonmetaloids)
+}, 400);
     
     displayTexts()
 
-}, 2400)
+}, 24000)
 
 
 window.setInterval(function(){ 
@@ -1009,5 +1048,8 @@ function getRandomLightColor() {
     metals.innerText =  `Metals ${moonmetals}`
     population.innerText =  `Population ${moonpopulation}`
   }
+
+
+  //updateResource(matDistributionsURL, 1, 2123)
 
 })
