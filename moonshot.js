@@ -1272,7 +1272,7 @@ setTimeout(function(){
    updateResource(matDistributionsURL, 22, credits)  //for the ship update get the ids
 }, 500);
 
-hash = {}
+hash = []
 
     hash[population] = moonpopulation
     hash[happiness] = 0
