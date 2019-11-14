@@ -1272,6 +1272,23 @@ setTimeout(function(){
    updateResource(matDistributionsURL, 22, credits)  //for the ship update get the ids
 }, 500);
 
+hash = {}
+
+    hash[population] = moonpopulation
+    hash[happiness] = 0
+    hash[waste_management] = wastereclamation
+    hash[solar_power] = solarpanels
+    hash[nuclear_power] = reactors
+    hash[material_production] = mines
+    hash[food_production] = farms
+    hash[housing] = houses
+    hash[luxury] = lux
+    hash[misc] = ""
+
+
+setTimeout(function(){ 
+    updateBase(basesURL, 1, hash)
+ }, 1000);
 
 
     displayTexts()
