@@ -30,7 +30,7 @@ let mines = 0
 //let rocketuranium = 1000
 //let rockethelium = 1000
 
-let moonorganics = 1000
+let moonorganics = 10000
 let moonuranium = 1000
 let moonhelium = 1000
 let moonmetals = 100000
@@ -51,7 +51,8 @@ window.addEventListener('DOMContentLoaded', (event) =>{
 
    let asteroids = []
 
-    let sold = document.getElementById("sale")
+   let sold = document.getElementById("sale")
+   let unload = document.getElementById("unload")
 
     let storage = document.getElementById("asteroidmake")
     let retrieve = document.getElementById("asteroidcrush")
@@ -76,6 +77,27 @@ window.addEventListener('DOMContentLoaded', (event) =>{
 
         displayTexts()
       })
+      unload.addEventListener('click', ev => {
+                        
+        if((landed === 1) && (rocketarray[0].x>(tutorial_canvas.width/2)) ){
+                moonorganics += rocketorganics
+                moonuranium += rocketuranium
+                moonhelium += rockethelium
+                moonmetals += rocketmetals
+                moonmetaloids += rocketmetaloids
+                moonelectricity += rocketelectricity
+                moonpopulation += rocketpopulation
+
+                rocketorganics = 0
+                rocketuranium = 0
+                rockethelium = 0
+                rocketmetals = 0
+                rocketmetaloids = 0
+                rocketelectricity = 0
+                rocketpopulation = 0
+        }
+          displayTexts()
+        })
 
 
       storage.addEventListener('click', ev => {
