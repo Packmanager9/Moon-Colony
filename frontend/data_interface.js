@@ -37,7 +37,6 @@ function fetchMatDistributions(url){
     .then(json => {
         console.log('fetched material distibutions!')
         console.log(json)
-        updateResource(url, 8, 10);
     })
 }
 
@@ -53,8 +52,10 @@ function fetchBases(url){
 }
 
 //Pass in the url and a hash with the key being the column and the value being the data
-function updateResource(url, matDistId, hash){
+//EXAMPLE: updateResource(url, 9, 10);
+function updateResource(url, matDistId, matCount){
     //let column = hash[key]
+    //`${url}/${matDistId}`
     console.log('updating')
     fetch(`${url}/${matDistId}`, {
         method: "PATCH", 
@@ -63,10 +64,11 @@ function updateResource(url, matDistId, hash){
             Accept: 'application/json'
         },
         body: JSON.stringify({
-            amount: 2
+            amount: matCount
         })
     })
-    .then(console.log('after patch'))
+    .then(resp => resp.json())
+    .then(json => console.log(json))
     console.log('after fetch')
 
 }
