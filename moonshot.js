@@ -27,8 +27,8 @@ let farms = 0
 let wastereclamation = 0
 let lux = 0
 let mines = 0
-let rocketuranium = 1000
-let rockethelium = 1000
+//let rocketuranium = 1000
+//let rockethelium = 1000
 
 let moonorganics = 1000
 let moonuranium = 1000
@@ -37,6 +37,14 @@ let moonmetals = 100000
 let moonmetaloids = 100000
 let moonelectricity = 1000
 let moonpopulation = 10000
+
+let rocketorganics = 0
+let rocketuranium = 0
+let rockethelium = 0
+let rocketmetals = 0
+let rocketmetaloids = 0
+let rocketelectricity = 0
+let rocketpopulation = 0
 
 window.addEventListener('DOMContentLoaded', (event) =>{
 
@@ -75,7 +83,7 @@ window.addEventListener('DOMContentLoaded', (event) =>{
         if(asteroids.length < 40){
       for(let h = 0; h < 1; h++){
 
-          let a1 = new Circle(moon.x, moon.y, 10, "#dd9999", Math.random()-.5, Math.random()-.5, 40 )
+          let a1 = new Circle(moon.x, moon.y, 10, "#555555", Math.random()-.5, Math.random()-.5, 40 )
       
          planets.push(a1)
       
@@ -1221,9 +1229,29 @@ setTimeout(function(){
     updateResource(matDistributionsURL, 14, moonmetaloids)
 }, 400);
 setTimeout(function(){ 
+   updateResource(matDistributionsURL, 15, rockethelium)  //for the ship update get the ids
+}, 700);
+setTimeout(function(){ 
+   updateResource(matDistributionsURL, 16, rocketuranium)  //for the ship update get the ids
+}, 750);
+setTimeout(function(){ 
+   updateResource(matDistributionsURL, 18, rocketelectricity)  //for the ship update get the ids
+}, 800);
+setTimeout(function(){ 
+   updateResource(matDistributionsURL, 19, rocketorganics)  //for the ship update get the ids
+}, 550);
+setTimeout(function(){ 
+   updateResource(matDistributionsURL, 20, rocketmetals)  //for the ship update get the ids
+}, 600);
+setTimeout(function(){ 
+   updateResource(matDistributionsURL, 21, rocketmetaloids)  //for the ship update get the ids
+}, 650);
+setTimeout(function(){ 
    updateResource(matDistributionsURL, 22, credits)  //for the ship update get the ids
-}, 450);
-    
+}, 500);
+
+
+
     displayTexts()
 
 
