@@ -111,10 +111,10 @@ window.addEventListener('DOMContentLoaded', (event) =>{
       
          asteroids.push(a1)
          }
+      }
       moonmetals -= 1000
       moonmetaloids -= 1000
       createLocation(locationsURL, ("Asteroid-"+getRandomLightColor()))
-      }
     }
     displayTexts()
     })
