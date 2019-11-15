@@ -3,8 +3,7 @@
     
 # rescue => exception
 # end
-=begin
-Base.create({name: "Neoterrum", population: 0, happiness: 60, waste_management: 0, solar_power: 0, nuclear_power: 0, material_production: 0, food_production: 0, housing: 0, luxury: 0, misc: 0})
+Colony.create({name: "Neoterrum", population: 0, happiness: 60, waste_management: 0, solar_power: 0, nuclear_power: 0, material_production: 0, food_production: 0, housing: 0, luxury: 0, misc: 0})
 
 #1
 MaterialResource.create({name: "Helium"})
@@ -28,7 +27,6 @@ loc1 = Location.create({name: "Earth"})
 Location.create({name: "Moon"})
 Location.create({name: "Ship"})
 Location.create({name: "Space"})
-=end
 
 MatDistribution.create({material_resource_id: 1, location_id: 1, amount: 10000})
 MatDistribution.create({material_resource_id: 2, location_id: 1, amount: 10000})
