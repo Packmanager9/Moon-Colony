@@ -12,15 +12,15 @@
 
 ActiveRecord::Schema.define(version: 2019_11_12_002904) do
 
-  create_table "bases", force: :cascade do |t|
+  create_table "colonies", force: :cascade do |t|
     t.string "name"
     t.integer "population"
     t.integer "happiness"
     t.integer "waste_management"
     t.integer "solar_power"
     t.integer "nuclear_power"
-    t.integer "material_production"
     t.integer "food_production"
+    t.integer "material_production"
     t.integer "housing"
     t.integer "luxury"
     t.string "misc"
