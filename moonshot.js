@@ -114,6 +114,7 @@ window.addEventListener('DOMContentLoaded', (event) =>{
       }
       moonmetals -= 1000
       moonmetaloids -= 1000
+      createLocation(locationsURL, ("Asteroid-"+getRandomLightColor()))
     }
     displayTexts()
     })
@@ -125,6 +126,7 @@ window.addEventListener('DOMContentLoaded', (event) =>{
             asteroids.pop()
       moonmetals += 1000
       moonmetaloids += 1000
+      deleteLocation(locationsURL, (5+(asteroids.length-24)))
       }
 
     displayTexts()
