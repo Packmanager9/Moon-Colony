@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :bases, only: [:index, :show]
+  resources :bases
   resources :mat_distributions
   resources :locations, only: [:index, :show]
   resources :material_resources, only: [:index, :show]
