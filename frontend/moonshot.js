@@ -4,7 +4,7 @@
 const locationsURL = 'http://localhost:3000/locations'
 const materialsURL = 'http://localhost:3000/material_resources'
 const matDistributionsURL = 'http://localhost:3000/mat_distributions'
-const basesURL = 'http://localhost:3000/bases'
+const basesURL = 'http://localhost:3000/colonies'
 
 
 let timer1 = 0
@@ -12,10 +12,12 @@ let landed = 0
 let maxspeed = 3.5
 let takeoff = 0
 let iframe = 0
+let tradetotal = 0
 //let rocketarray[0].xacc = 0
 
 // let rocketarray[0].yacc = 0
 
+let credits = 25000
 let fuel = 500
 let healthstat = 100000
 let solarpanels = 0
@@ -25,8 +27,10 @@ let farms = 0
 let wastereclamation = 0
 let lux = 0
 let mines = 0
+//let rocketuranium = 1000
+//let rockethelium = 1000
 
-let moonorganics = 1000
+let moonorganics = 10000
 let moonuranium = 1000
 let moonhelium = 1000
 let moonmetals = 100000
@@ -34,8 +38,152 @@ let moonmetaloids = 100000
 let moonelectricity = 1000
 let moonpopulation = 10000
 
+let rocketorganics = 0
+let rocketuranium = 0
+let rockethelium = 0
+let rocketmetals = 0
+let rocketmetaloids = 0
+let rocketelectricity = 0
+let rocketpopulation = 0
+
 window.addEventListener('DOMContentLoaded', (event) =>{
 
+
+   let asteroids = []
+
+   let sold = document.getElementById("sale")
+   let unload = document.getElementById("unload")
+
+    let storage = document.getElementById("asteroidmake")
+    let retrieve = document.getElementById("asteroidcrush")
+     storage.innerText = "Store Resources in a new Asteroid"
+     retrieve.innerText = "Retrieve Resources in an Asteroid"
+    let submitbox = document.getElementById("gimmie")
+    let submitmbox = document.getElementById("gimmu")
+    let uranload = document.getElementById("load-u")
+    let heliload = document.getElementById("load-he")
+    let contentbox = document.getElementById("comment_input")
+    let loadme = document.getElementById("load-input")
+
+
+    sold.addEventListener('click', ev => {
+        ev.preventDefault()
+        tradetotal = (rocketuranium + rockethelium)
+        if((landed === 1) && (rocketarray[0].x<(tutorial_canvas.width/2)) ){
+        credits += tradetotal*10
+        rockethelium = 0
+        rocketuranium = 0
+        }
+
+        displayTexts()
+      })
+      unload.addEventListener('click', ev => {
+                        
+        if((landed === 1) && (rocketarray[0].x>(tutorial_canvas.width/2)) ){
+                moonorganics += rocketorganics
+                moonuranium += rocketuranium
+                moonhelium += rockethelium
+                moonmetals += rocketmetals
+                moonmetaloids += rocketmetaloids
+                moonelectricity += rocketelectricity
+                moonpopulation += rocketpopulation
+
+                rocketorganics = 0
+                rocketuranium = 0
+                rockethelium = 0
+                rocketmetals = 0
+                rocketmetaloids = 0
+                rocketelectricity = 0
+                rocketpopulation = 0
+        }
+          displayTexts()
+        })
+
+
+      storage.addEventListener('click', ev => {
+          if((moonmetaloids >= 1000) && (moonmetals >= 1000)){
+        if(asteroids.length < 40){
+      for(let h = 0; h < 1; h++){
+
+          let a1 = new Circle(moon.x, moon.y, 10, "#555555", Math.random()-.5, Math.random()-.5, 40 )
+      
+         planets.push(a1)
+      
+         asteroids.push(a1)
+         }
+      }
+      moonmetals -= 1000
+      moonmetaloids -= 1000
+      createLocation(locationsURL, ("Asteroid-"+getRandomLightColor()))
+    }
+    displayTexts()
+    })
+
+    retrieve.addEventListener('click', ev => {
+        if(asteroids.length >= 25){
+
+         planets.pop()
+            asteroids.pop()
+      moonmetals += 1000
+      moonmetaloids += 1000
+      deleteLocation(locationsURL, (5+(asteroids.length-24)))
+      }
+
+    displayTexts()
+    })
+
+      uranload.addEventListener('click', ev => {
+        ev.preventDefault()
+        tradetotal = parseInt(loadme.value,10)
+        if((landed === 1) && (rocketarray[0].x>(tutorial_canvas.width/2)) ){
+            if(moonuranium >= tradetotal){
+                rocketuranium += tradetotal
+                moonuranium -= tradetotal
+            }
+        }
+        
+        displayTexts()
+      })
+      heliload.addEventListener('click', ev => {
+          ev.preventDefault()
+          tradetotal = parseInt(loadme.value,10)
+
+        if((landed === 1) && (rocketarray[0].x>(tutorial_canvas.width/2)) ){
+            if(moonhelium >= tradetotal){
+                rockethelium += tradetotal
+                moonhelium -= tradetotal
+            }
+        }
+
+          displayTexts()
+        })
+
+      submitbox.addEventListener('click', ev => {
+          ev.preventDefault()
+          tradetotal = parseInt(contentbox.value,10)
+          if((landed === 1) && (rocketarray[0].x<(tutorial_canvas.width/2)) ){
+          if(credits >= tradetotal){
+          credits -= tradetotal
+          rocketmetals += tradetotal
+          }
+        }
+          displayTexts()
+        })
+
+
+      submitmbox.addEventListener('click', ev => {
+        ev.preventDefault()
+        tradetotal = parseInt(contentbox.value,10)
+        if((landed === 1) && (rocketarray[0].x<(tutorial_canvas.width/2)) ){
+        if(credits >= tradetotal){
+        credits -= tradetotal
+        rocketmetaloids += tradetotal
+        }
+    }
+        displayTexts()
+      })
+        
+    let moneybox = document.getElementById("credits");
 
     let buysolar = document.getElementById("solar");
     buysolar.innerText = "Build Solar Panel"
@@ -51,6 +199,85 @@ window.addEventListener('DOMContentLoaded', (event) =>{
     buywaste.innerText = "Improve Waste Reclamation"
     let buyluxuries = document.getElementById("luxury");
     buyluxuries.innerText = "Build Luxury Facilities"
+
+    let repair = document.getElementById("repair");
+    repair.innerText = "Repair Ship"
+
+
+    repair.addEventListener('click', e => {
+
+        if(landed == 1){ 
+            healthstat += 1
+
+
+            if((landed === 1) && (rocketarray[0].x>(tutorial_canvas.width/2)) ){
+
+
+                if(healthstat > 90000){
+                    moonmetals -= 1
+                }else if(healthstat > 80000){
+                    moonmetals -= 2
+                }else if(healthstat > 70000){
+                    moonmetals -= 4
+                }else if(healthstat > 60000){
+                    moonmetals -= 8
+                }else if(healthstat > 50000){
+                    moonmetals -= 16
+                }else if(healthstat > 40000){
+                    moonmetals -= 32
+                }else if(healthstat > 30000){
+                    moonmetals -= 64
+                }else if(healthstat > 20000){
+                    moonmetals -= 128
+                }else if(healthstat > 10000){
+                    moonmetals -= 256
+                }else if(healthstat > 0){
+                    moonmetals -= 512
+                }
+    
+    
+    
+    
+            healthstat = 100000
+    
+            }
+
+            if((landed === 1) && (rocketarray[0].x<(tutorial_canvas.width/2)) ){
+    
+    
+                if(healthstat > 90000){
+                    credits -= 1
+                }else if(healthstat > 80000){
+                    credits -= 2
+                }else if(healthstat > 70000){
+                    credits -= 4
+                }else if(healthstat > 60000){
+                    credits -= 8
+                }else if(healthstat > 50000){
+                    credits -= 16
+                }else if(healthstat > 40000){
+                    credits -= 32
+                }else if(healthstat > 30000){
+                    credits -= 64
+                }else if(healthstat > 20000){
+                    credits -= 128
+                }else if(healthstat > 10000){
+                    credits -= 256
+                }else if(healthstat > 0){
+                    credits -= 512
+                }
+    
+    
+    
+    
+            healthstat = 100000
+    
+            }
+        }
+
+        displayTexts()
+    })
+
 
     buysolar.addEventListener('click', e => {
 
@@ -296,7 +523,6 @@ window.addEventListener('DOMContentLoaded', (event) =>{
    let stars = []
 
 
-   let asteroids = []
    for(let h = 0; h < 16; h++){
 
     let basicstat = (Math.random()*8.5)+5
@@ -331,7 +557,7 @@ window.addEventListener('DOMContentLoaded', (event) =>{
 window.setInterval(function(){ 
 
 
-    eaten.innerText = `${fuel}`
+    eaten.innerText = `Fuel: ${Math.ceil(fuel/10)}%`
 
     tutorial_canvas_context.clearRect(0, 0, tutorial_canvas.width, tutorial_canvas.height)
 
@@ -731,7 +957,58 @@ if (iframe === 0){
     
 
      }
-    planets[w].draw(tutorial_canvas_context)
+
+
+crater.x = moon.x + 40
+crater.y = moon.y+ 40
+crater3.x = moon.x + -40
+crater3.y = moon.y+ 40
+crater2.x = moon.x + 40
+crater2.y = moon.y+ -40
+
+land4.x = earth.x+10
+land4.y = earth.y
+
+
+land2.x = earth.x-50
+land2.y = earth.y+60
+
+
+land3.x = earth.x+70
+land3.y = earth.y-80
+
+land1.x = earth.x-65
+land1.y = earth.y-75
+
+land6.x = earth.x-12
+land6.y = earth.y-12
+
+land5.x = earth.x+70
+land5.y = earth.y+80
+
+land7.left = earth.x
+land7.top = earth.y
+
+planets[w].draw(tutorial_canvas_context)
+if(planets[w] === earth){
+    land1.draw(tutorial_canvas_context)
+    land2.draw(tutorial_canvas_context)
+    land3.draw(tutorial_canvas_context)
+    land4.draw(tutorial_canvas_context)
+    land7.draw(tutorial_canvas_context)
+    land5.draw(tutorial_canvas_context)
+    land6.draw(tutorial_canvas_context)
+}
+
+if(planets[w] === moon){
+    crater.draw(tutorial_canvas_context)
+    
+    crater3.draw(tutorial_canvas_context)
+    
+    crater2.draw(tutorial_canvas_context)
+}
+
+
 
 }
 
@@ -758,9 +1035,13 @@ if (iframe === 0){
 
     if(landed == 0 && takeoff == 0){
    rocketarray[0].move()
-    momentum.innerText = Math.round((Math.abs(rocketarray[0].ymom) + Math.abs(rocketarray[0].xmom))*10) + ''
+    momentum.innerText = 'Velocity: '+ Math.round((Math.abs(rocketarray[0].ymom) + Math.abs(rocketarray[0].xmom))*10) + '%'
+
+    
     } else{
         rocketarray[0].stop()
+
+    momentum.innerText = 'Velocity: '+ '0%'
 
     }
     
@@ -804,7 +1085,7 @@ if (iframe === 0){
 
     }
 
-    health.innerText = `${Math.ceil(healthstat/1000)}`
+    health.innerText = `Hull Integrity: ${Math.ceil(healthstat/1000)}`
    
 
     //if(landed == 1){
@@ -877,50 +1158,7 @@ if (iframe === 0){
         }
     }
 //}
-crater.x = moon.x + 40
-crater.y = moon.y+ 40
-crater3.x = moon.x + -40
-crater3.y = moon.y+ 40
-crater2.x = moon.x + 40
-crater2.y = moon.y+ -40
 
-land4.x = earth.x+10
-land4.y = earth.y
-
-
-land2.x = earth.x-50
-land2.y = earth.y+60
-
-
-land3.x = earth.x+70
-land3.y = earth.y-80
-
-land1.x = earth.x-65
-land1.y = earth.y-75
-
-land6.x = earth.x-12
-land6.y = earth.y-12
-
-land5.x = earth.x+70
-land5.y = earth.y+80
-
-land7.left = earth.x
-land7.top = earth.y
-
-
-land1.draw(tutorial_canvas_context)
-land2.draw(tutorial_canvas_context)
-land3.draw(tutorial_canvas_context)
-land4.draw(tutorial_canvas_context)
-land7.draw(tutorial_canvas_context)
-land5.draw(tutorial_canvas_context)
-land6.draw(tutorial_canvas_context)
-
-crater.draw(tutorial_canvas_context)
-
-crater3.draw(tutorial_canvas_context)
-
-crater2.draw(tutorial_canvas_context)
 
 
 for(let st = 0; st<asteroids.length/2; st++){
@@ -939,7 +1177,7 @@ rocketarray[0].draw(tutorial_canvas_context)
     timer1++
 //}
 
-
+rocketMassSize(rocketarray[0])
 }, 18)
 
 
@@ -949,6 +1187,7 @@ window.setInterval(function(){
 
     if(mines >= 1){
     moonuranium += (Math.random()*(mines*.75))+(.5/(mines+1))
+    moonhelium += (10*mines)
     }
     
 
@@ -962,12 +1201,12 @@ window.setInterval(function(){
 
 
     if(moonpopulation < (houses*10000) && (moonorganics > 0)){
-    moonpopulation *= 1.0001
+    moonpopulation *= 1.0023
     }
 
 
     if (moonorganics <= 0){
-        moonpopulation /= 1.005
+        moonpopulation /= 1.015
 
     }
 
@@ -996,7 +1235,7 @@ window.setInterval(function(){
     updateResource(matDistributionsURL, 8, moonhelium)
  }, 100);
  setTimeout(function(){ 
-    updateResource(matDistributionsURL, 9, Math.round(moonuranium))
+    updateResource(matDistributionsURL, 9, Math.floor(moonuranium))
 }, 150);
 setTimeout(function(){ 
     updateResource(matDistributionsURL, 10, moonpopulation)
@@ -1013,8 +1252,51 @@ setTimeout(function(){
 setTimeout(function(){ 
     updateResource(matDistributionsURL, 14, moonmetaloids)
 }, 400);
-    
+setTimeout(function(){ 
+   updateResource(matDistributionsURL, 15, rockethelium)  //for the ship update get the ids
+}, 700);
+setTimeout(function(){ 
+   updateResource(matDistributionsURL, 16, rocketuranium)  //for the ship update get the ids
+}, 750);
+setTimeout(function(){ 
+   updateResource(matDistributionsURL, 18, rocketelectricity)  //for the ship update get the ids
+}, 800);
+setTimeout(function(){ 
+   updateResource(matDistributionsURL, 19, rocketorganics)  //for the ship update get the ids
+}, 550);
+setTimeout(function(){ 
+   updateResource(matDistributionsURL, 20, rocketmetals)  //for the ship update get the ids
+}, 600);
+setTimeout(function(){ 
+   updateResource(matDistributionsURL, 21, rocketmetaloids)  //for the ship update get the ids
+}, 650);
+setTimeout(function(){ 
+   updateResource(matDistributionsURL, 22, credits)  //for the ship update get the ids
+}, 500);
+
+hash = []
+
+    hash.population = moonpopulation
+    hash.happiness = lux
+    hash.waste_management = wastereclamation
+    hash.solar_power = solarpanels
+    hash.nuclear_power = reactors
+    hash.material_production = mines
+    hash.food_production = farms
+    hash.housing = houses
+    hash.luxury = lux
+    hash.misc = ""
+
+
+setTimeout(function(){ 
+    updateBase(basesURL, 1, hash)
+ }, 1000);
+
+
     displayTexts()
+
+
+
 
 }, 24000)
 
@@ -1038,18 +1320,24 @@ function getRandomLightColor() {
   }
 
   function displayTexts(){
-    organics.innerText =  `Organics ${moonorganics}`
-    population.innerText =  `Population ${moonpopulation}`
-    organics.innerText =  `Organics ${moonorganics}`
-    uranium.innerText =  `Uranium ${moonuranium}`
-    metaloids.innerText =  `Metaloids ${moonmetaloids}`
-    electricity.innerText =  `Electricity ${moonelectricity}`
-    helium.innerText =  `Helium ${moonhelium}`
-    metals.innerText =  `Metals ${moonmetals}`
-    population.innerText =  `Population ${moonpopulation}`
+    organics.innerText =  `Organics: ${moonorganics},  Farms: ${farms}, Reclamation Level: ${wastereclamation}%`
+    population.innerText =  `Population: ${moonpopulation}, Biodomes: ${houses}, Luxury Buildings: ${lux} `
+    uranium.innerText =  `Uranium: ${Math.round(moonuranium)}, Mines: ${mines}`
+    metaloids.innerText =  `Metaloids: ${moonmetaloids}`
+    electricity.innerText =  `Electricity: ${moonelectricity} Kilowatts, Reactors: ${reactors}, Solar Panels: ${solarpanels}`
+    helium.innerText =  `Helium: ${moonhelium}`
+    metals.innerText =  `Metals: ${moonmetals}`
+    moneybox.innerText = `Credits: ${credits}`
   }
 
+
+  function rocketMassSize(rocket){
+    rocket.mass = 1000 + rocketuranium
+    rocket.radius = 12 + Math.ceil(rockethelium/200)
+
+  }
 
   //updateResource(matDistributionsURL, 1, 2123)
 
 })
+
