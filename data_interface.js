@@ -80,6 +80,28 @@ function fetchBases(url){
     })
 }
 
+
+function createLocation(locationsUrl, locationName)
+{
+    fetch(`${locationsUrl}`, {
+        method: "POST", 
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+        },
+        body: JSON.stringify({
+            name: locationName
+        })
+    })
+    .then(resp => resp.json())
+    .then(json => console.log(json))
+}
+function deleteLocation(locationsUrl, locationId)
+{
+    fetch(`${locationsUrl}/${locationId}`, {
+        method: "DELETE"
+    })
+}
 //Pass in the url and a hash with the key being the column and the value being the data
 //EXAMPLE: updateResource(url, 9, 10);
 function updateResource(url, matDistId, matCount){
