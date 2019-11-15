@@ -4,7 +4,7 @@
 const locationsURL = 'http://localhost:3000/locations'
 const materialsURL = 'http://localhost:3000/material_resources'
 const matDistributionsURL = 'http://localhost:3000/mat_distributions'
-const basesURL = 'http://localhost:3000/bases'
+const basesURL = 'http://localhost:3000/colonies'
 
 
 let timer1 = 0
@@ -1274,16 +1274,16 @@ setTimeout(function(){
 
 hash = []
 
-    hash[population] = moonpopulation
-   // hash[happiness] = lux
-    hash[waste_management] = wastereclamation
-    hash[solar_power] = solarpanels
-    hash[nuclear_power] = reactors
-    hash[material_production] = mines
-    hash[food_production] = farms
-    hash[housing] = houses
-    hash[luxury] = lux
-    hash[misc] = ""
+    hash.population = moonpopulation
+    hash.happiness = lux
+    hash.waste_management = wastereclamation
+    hash.solar_power = solarpanels
+    hash.nuclear_power = reactors
+    hash.material_production = mines
+    hash.food_production = farms
+    hash.housing = houses
+    hash.luxury = lux
+    hash.misc = ""
 
 
 setTimeout(function(){ 
